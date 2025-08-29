@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+
+* {
+    @apply transition;
+}
+
+:root {
+    font-family: Inter, sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+}
+
+@supports (font-variation-settings: normal) {
+    :root {
+        font-family: InterVariable, sans-serif;
+    }
+}
+
+a.link {
+    @apply text-blue-500 hover:text-blue-600 hover:underline underline-offset-2 decoration-1;
+}

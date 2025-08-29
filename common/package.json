@@ -1,0 +1,20 @@
+{
+  "name": "common",
+  "private": true,
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "watch": "tsc -w -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "zod": "^4.1.1"
+  },
+  "dependencies": {
+    "@types/mongoose": "^5.11.96",
+    "shophour": "file:.."
+  }
+}
