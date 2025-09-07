@@ -58,6 +58,26 @@ export async function getCategoryById (req: Request, res: Response): Promise<voi
 
 
 /**
+ * Get category by slug.
+ * @access OPEN
+ * GET /api/categories/slug/:categorySlug/
+ */
+export async function getCategoryBySlug (req: Request, res: Response): Promise<void> {
+    const { categorySlug } = req.params;
+    const category: TCategory[] | null = await CategoryModel.find({ slug: categorySlug });
+    if (!category?.length) {
+        res.status(404);
+        throw new Error("Category not found!");
+    }
+    res.json({
+        success: true,
+        message: `${category[0].name} category found.`,
+        data: category[0],
+    });
+}
+
+
+/**
  * Create a new category.
  * @access [admin, manager]
  * POST /api/categories/
@@ -118,13 +138,34 @@ export async function deleteCategory (req: Request, res: Response): Promise<void
 
 
 /**
- * Get products in a category.
+ * Get products in a category by slug.
  * @access OPEN
- * GET /api/categories/:categoryId/products/
+ * GET /api/categories/id/:categoryId/products/
  */
-export async function getCategoryProducts (req: Request, res: Response): Promise<void> {
+export async function getCategoryProductsById (req: Request, res: Response): Promise<void> {
     const { categoryId } = req.params;
-    const products: Array<TProduct> = await ProductModel.find({ category: categoryId });
+    const products: Array<TProduct> = await ProductModel.find({ category: categoryId }).populate([ "category", "thumbnail" ]);
+    res.json({
+        success: true,
+        message: `${products.length} product(s) found.`,
+        data: products,
+    });
+}
+
+
+/**
+ * Get products in a category by slug.
+ * @access OPEN
+ * GET /api/categories/id/:categoryId/products/
+ */
+export async function getCategoryProductsBySlug (req: Request, res: Response): Promise<void> {
+    const { categorySlug } = req.params;
+    const category: TCategory[] | null = await CategoryModel.find({ slug: categorySlug });
+    if (!category?.length) {
+        res.status(404);
+        throw new Error("Category not found!");
+    }
+    const products: Array<Omit<TProduct, "gallery">> = await ProductModel.find({ category: category[0]._id }, [ "-gallery" ]).populate([ "category", "thumbnail" ]);
     res.json({
         success: true,
         message: `${products.length} product(s) found.`,

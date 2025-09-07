@@ -14,7 +14,7 @@ export function SelectInput ({ name, children, className, containerClassName, la
             <label htmlFor={name} className={"flex flex-col gap-1 w-full"}>
                 {label && <p className={"font-semibold leading-3 mb-1"}>{label}</p>}
                 <select
-                    className={`!border-2 border-slate-300 text-slate-600 hover:border-blue-500 focus:border-blue-500 hover:text-blue-500 focus:text-blue-600 focus:bg-blue-50 rounded-lg px-2 py-1 outline-none ${className ?? ""}`}
+                    className={`!border-2 border-slate-300 text-slate-600 hover:border-blue-500 focus:border-blue-500 hover:text-blue-500 focus:text-blue-600 focus:bg-blue-50 rounded-lg px-2 py-1.5 outline-none ${className ?? ""}`}
                     name={name}
                     id={name}
                     {...props}

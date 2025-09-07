@@ -3,18 +3,29 @@ import { PRODUCTS_URL } from "../../../../common/dist/index.js";
 import { apiSlice } from "./baseQuery.ts";
 
 
+type RequestQuery = {
+    size?: number;
+    page?: number;
+    keyword?: string;
+}
+
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getProducts: builder.query({
-            query: () => ({
-                url: PRODUCTS_URL,
-            }),
-            keepUnusedDataFor: 5,
+            query: ({ size, page, keyword }: RequestQuery) => (
+                `${PRODUCTS_URL}/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            ),
+        }),
+        getProductsOnSale: builder.query({
+            query: ({ size, page, keyword }: RequestQuery) => (
+                `${PRODUCTS_URL}/on-sale/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            ),
+        }),
+        getInactiveProducts: builder.query({
+            query: ({ size, page, keyword }: RequestQuery) => `${PRODUCTS_URL}/inactive?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`,
         }),
         getProductById: builder.query({
-            query: (productId: string) => ({
-                url: `${PRODUCTS_URL}/${productId}`,
-            }),
+            query: (productId: string) => `${PRODUCTS_URL}/${productId}`,
         }),
         createProduct: builder.mutation({
             query: (body: createProductReqBodyType) => ({
@@ -24,7 +35,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         updateProduct: builder.mutation({
-            query: (body: updateProductReqBodyType & {productId: string}) => ({
+            query: (body: updateProductReqBodyType & { productId: string }) => ({
                 url: `${PRODUCTS_URL}/${body.productId}`,
                 method: "PUT",
                 body,
@@ -37,7 +48,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         updateProductProperty: builder.mutation({
-            query: (body: updateProductPropertyReqBodyType & {productId: string}) => ({
+            query: (body: updateProductPropertyReqBodyType & { productId: string }) => ({
                 url: `${PRODUCTS_URL}/${body.productId}`,
                 method: "PATCH",
                 body,
@@ -49,7 +60,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         submitProductReview: builder.mutation({
-            query: (body: submitReviewReqBodyType & {productId: string}) => ({
+            query: (body: submitReviewReqBodyType & { productId: string }) => ({
                 url: `${PRODUCTS_URL}/${body.productId}/reviews`,
                 method: "POST",
                 body,
@@ -62,7 +73,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         editProductReview: builder.mutation({
-            query: (body: editReviewReqBodyType & {productId: string, reviewId: string}) => ({
+            query: (body: editReviewReqBodyType & { productId: string, reviewId: string }) => ({
                 url: `${PRODUCTS_URL}/${body.productId}/reviews/${body.reviewId}`,
                 method: "PUT",
                 body,
@@ -71,4 +82,4 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
 });
 
-export const {useGetProductsQuery, useGetProductByIdQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteProductMutation, useUpdateProductPropertyMutation, useGetProductReviewsQuery, useSubmitProductReviewMutation, useDeleteProductReviewMutation, useEditProductReviewMutation} = productsApiSlice;
+export const { useGetProductsQuery, useGetProductsOnSaleQuery, useGetInactiveProductsQuery, useGetProductByIdQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteProductMutation, useUpdateProductPropertyMutation, useGetProductReviewsQuery, useSubmitProductReviewMutation, useDeleteProductReviewMutation, useEditProductReviewMutation } = productsApiSlice;

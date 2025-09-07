@@ -3,13 +3,14 @@ import { type HydratedDocument, type Model, Types } from "mongoose";
 
 
 export interface IPaymentRawDoc {
-    order: Types.ObjectId;
     user: Types.ObjectId;
+    order: Types.ObjectId;
     amount: number;
-    paymentMethod: string;
-    status: "pending" | "completed" | "failed";
     transactionId: string;
-    paymentGateway: "razorpay" | "cod";
+    status: string;
+    update_time: string;
+    email_address: string;
+    paymentGateway: "paypal" | "cod";
 }
 
 export interface IPaymentMethods {

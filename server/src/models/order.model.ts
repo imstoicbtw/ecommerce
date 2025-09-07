@@ -10,9 +10,18 @@ const orderSchema: Schema = new Schema<IOrderRawDoc, TOrderModel, IOrderMethods,
         ref: "User",
         required: [ true, "User is required." ],
     },
+    payment: {
+        type: Schema.Types.ObjectId,
+        ref: "Payment",
+        default: null,
+    },
     products: {
         type: [ orderItemSchema ],
         required: [ true, "Ordered product is required." ],
+    },
+    subTotal: {
+        type: Number,
+        required: [ true, "Subtotal is required." ],
     },
     totalAmount: {
         type: Number,
@@ -21,24 +30,21 @@ const orderSchema: Schema = new Schema<IOrderRawDoc, TOrderModel, IOrderMethods,
     savedAmount: {
         type: Number,
     },
+    shippingAmount: {
+        type: Number,
+        required: [ true, "Shipping amount is required." ],
+    },
+    taxAmount: {
+        type: Number,
+        required: [ true, "Tax amount is required." ],
+    },
     status: {
         type: String,
         enum: {
-            values: [ "pending", "processing", "shipped", "delivered", "cancelled" ],
+            values: [ "pending", "processing", "shipped", "delivered", "cancelled", "refunded", "failed" ],
             message: "{VALUE} is not a valid status.",
         },
         default: "pending",
-    },
-    paymentStatus: {
-        type: String,
-        enum: {
-            values: [ "pending", "paid", "failed" ],
-            message: "{VALUE} is not a valid payment status.",
-        },
-        default: "pending",
-    },
-    paymentMethod: {
-        type: String,
     },
     shippingAddress: {
         type: addressSchema,

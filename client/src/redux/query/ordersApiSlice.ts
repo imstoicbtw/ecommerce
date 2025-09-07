@@ -1,14 +1,20 @@
-import { ORDERS_URL } from "common/dist/index.ts";
-import type { createOrderReqBodyType, updateOrderStatusReqBodyType } from "common/dist/zod/requests/order.zod.ts";
+import { ORDERS_URL } from "common/dist/index.js";
+import type { createOrderReqBodyType, updateOrderStatusReqBodyType } from "common/dist/zod/requests/order.zod.js";
 import { apiSlice } from "./baseQuery.ts";
 
+
+type RequestQuery = {
+    size?: number;
+    page?: number;
+    keyword?: string;
+}
 
 export const ordersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getAllOrders: builder.query({
-            query: () => ({
-                url: ORDERS_URL,
-            }),
+            query: ({ size, page, keyword }: RequestQuery) => (
+                `${ORDERS_URL}/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            ),
         }),
         getOrderById: builder.query({
             query: (orderId: string) => ({
@@ -23,9 +29,9 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         getMyOrders: builder.query({
-            query: () => ({
-                url: `${ORDERS_URL}/current-user`,
-            }),
+            query: ({ size, page, keyword }: RequestQuery) => (
+                `${ORDERS_URL}/current-user/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            ),
         }),
         getMyOrderById: builder.query({
             query: (orderId: string) => ({
@@ -33,7 +39,7 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         updateOrderStatus: builder.mutation({
-            query: (body: updateOrderStatusReqBodyType & {orderId: string}) => ({
+            query: (body: updateOrderStatusReqBodyType & { orderId: string }) => ({
                 url: `${ORDERS_URL}/${body.orderId}/update`,
                 method: "PATCH",
                 body,
@@ -49,4 +55,4 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 });
 
 
-export const {useGetAllOrdersQuery, useGetOrderByIdQuery, useCreateOrderMutation, useGetMyOrdersQuery, useGetMyOrderByIdQuery, useUpdateOrderStatusMutation, useCancelOrderMutation} = ordersApiSlice;
+export const { useGetAllOrdersQuery, useGetOrderByIdQuery, useCreateOrderMutation, useGetMyOrdersQuery, useGetMyOrderByIdQuery, useUpdateOrderStatusMutation, useCancelOrderMutation } = ordersApiSlice;

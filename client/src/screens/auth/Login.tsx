@@ -8,21 +8,25 @@ import { type FormEvent, useState } from "react";
 import { Button } from "../../components/Button.tsx";
 import { Input } from "../../components/Input.tsx";
 import { useLoginMutation } from "../../redux/query/authApiSlice.ts";
+import { setUser } from "../../redux/slices/userSlice.ts";
 import { setIn } from "../../utils/object-mutation.util.js";
+import { useDispatch } from "react-redux";
 
 
 export function Login () {
 
+    const dispatch = useDispatch();
+
     const [ formState, setFormState ] = useState<Partial<loginUserReqBodyType>>({});
     const [ , setErrors ] = useState<Record<string, string>>({});
-    const [ login, {isLoading} ] = useLoginMutation();
+    const [ login, { isLoading } ] = useLoginMutation();
     const navigate = useNavigate();
     const location = useLocation();
     const redirect = new URLSearchParams(location.search).get("redirect");
 
     function handleChange (event: React.ChangeEvent<HTMLFormElement>) {
         setFormState(prevState => {
-            const newState = {...prevState};
+            const newState = { ...prevState };
             setIn(newState, event.target.name, event.target.value);
             return newState;
         });
@@ -39,8 +43,12 @@ export function Login () {
         }
         try {
             const response = await login(result.data).unwrap();
-            setErrors({});
             toast.success(response.message);
+            console.log(response);
+            const { _id, name, avatar, role, status, email } = response.user;
+            const user = { _id, name, avatar: avatar?.url, role, isActive: status, email };
+            dispatch(setUser(user));
+            setErrors({});
             if (redirect) navigate(redirect);
             else history.back();
 
@@ -53,7 +61,7 @@ export function Login () {
         <main>
             <h1 className={"flex gap-1 items-center text-xl font-black justify-center leading-0 text-blue-600"}>
                 <ClockIcon className={"size-5"} />
-                SHOPHOUR
+                <span>SHOPHOUR</span>
             </h1>
             <h2 className={"text-center text-2xl font-black mb-6 mt-3"}>
                 Welcome back!
@@ -61,7 +69,7 @@ export function Login () {
             <form
                 onChange={handleChange}
                 onSubmit={handleSubmit}
-                className={"grid gap-4 w-xs"}
+                className={"grid gap-4 w-xs m-auto"}
             >
                 <Input
                     name="email"
@@ -80,6 +88,7 @@ export function Login () {
             <p className={"text-center text-sm text-gray-500 mt-4"}>
                 Don't have an account? <Link to={"/auth/register"} className={"link font-semibold"}>Create account</Link>
             </p>
+            <Link to={"/"} className={"link text-center block mt-5"}>&larr; Go home</Link>
         </main>
     );
 }

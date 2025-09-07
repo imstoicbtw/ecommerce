@@ -10,7 +10,7 @@ import {
 } from "../controllers/order.controller.js";
 import { authenticate, authorize } from "../middlewares/auth.middleware.js";
 import { validateBody } from "../middlewares/validate-body.middleware.js";
-import { createOrderReqBody } from "../../../common/dist/zod/requests/order.zod.js";
+import { createOrderReqBody, updateOrderStatusReqBody } from "../../../common/dist/zod/requests/order.zod.js";
 
 
 export const orderRouter = Router();
@@ -21,11 +21,12 @@ orderRouter.route("/")
                authenticate,
                authorize(userRoles.Admin, userRoles.Manager),
                getAllOrders,
-           ).post(
-    authenticate,
-    validateBody(createOrderReqBody),
-    createOrder,
-);
+           )
+           .post(
+               authenticate,
+               validateBody(createOrderReqBody),
+               createOrder,
+           );
 
 
 orderRouter.route("/current-user/:orderId")
@@ -46,8 +47,7 @@ orderRouter.route("/:orderId")
 orderRouter.route("/:orderId/update")
            .patch(
                authenticate,
-               authorize(userRoles.Admin, userRoles.Manager),
-               validateBody(createOrderReqBody.pick({status: true})),
+               validateBody(updateOrderStatusReqBody),
                updateOrderStatus,
            );
 

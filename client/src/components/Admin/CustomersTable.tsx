@@ -1,6 +1,5 @@
 import type { IUserRawDoc } from "common/dist/mongoose/user.types.ts";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify/unstyled";
 import { useGetCustomersQuery, useUpdateUserStatusMutation } from "../../redux/query/usersApiSlice.ts";
 import Avatar from "../Avatar/index.tsx";
@@ -21,8 +20,7 @@ type Props = PropsOptional | PropsRequired;
 export function CustomersTable ({ filterKey, filterValue }: Props) {
 
     const [ updateCustomerStatus, { isLoading: updatingCustomerStatus } ] = useUpdateUserStatusMutation();
-    const { currentData: fetchedCustomersData, isLoading: fetchingCustomerData, error, refetch: refetchCustomers } = useGetCustomersQuery(null);
-    const location = useLocation();
+    const { currentData: fetchedCustomersData, isLoading: fetchingCustomerData, error } = useGetCustomersQuery({ size: 1000 }, { refetchOnMountOrArgChange: true });
     const [ customers, setCustomers ] = useState<Array<IUserRawDoc & { _id: string }>>([]);
     const [ customersLength, setCustomersLength ] = useState<number>(0);
 
@@ -46,10 +44,6 @@ export function CustomersTable ({ filterKey, filterValue }: Props) {
     useEffect(() => {
         setCustomersLength(customers.filter((customer: IUserRawDoc) => !filterKey ? true : customer[filterKey] === filterValue).length || 0);
     }, [ customers ]);
-
-    useEffect(() => {
-        refetchCustomers();
-    }, [ location ]);
 
 
     if (error) return <p className={"italic text-red-500"}>Error: {"message" in error ? error.message : "Something went wrong please try reloading the page..."}</p>;

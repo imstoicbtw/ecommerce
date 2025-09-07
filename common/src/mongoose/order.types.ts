@@ -23,13 +23,15 @@ export type TOrderItem = HydratedDocument<IOrderItemRawDoc, IOrderItemMethods & 
 
 // * Order
 export interface IOrderRawDoc {
+    payment: Types.ObjectId | null;
     user: Types.ObjectId;
     products: Array<TOrderItem>;
+    subTotal: number;
     totalAmount: number;
     savedAmount: number;
+    shippingAmount: number;
+    taxAmount: number;
     status: OrderStatus;
-    paymentStatus: "pending" | "paid" | "failed";
-    paymentMethod: string;
     shippingAddress: TAddress;
 }
 

@@ -2,9 +2,10 @@ import { PhotoIcon, PlusIcon } from "@heroicons/react/24/outline/index";
 import { XCircleIcon } from "@heroicons/react/24/solid/index";
 import type { ICategoryRawDoc } from "common/dist/mongoose/category.types.ts";
 import type { IMediaRawDoc } from "common/dist/mongoose/media.types.ts";
+import type { IProductRawDoc } from "common/dist/mongoose/product.types.ts";
 import { createProductReqBody, type updateProductReqBodyType } from "common/dist/zod/requests/product.zod.js";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify/unstyled";
 import { Button } from "../../../components/Button.tsx";
 import { Input } from "../../../components/Input.tsx";
@@ -22,7 +23,7 @@ export function EditProduct () {
     const { productId } = useParams();
 
     const { currentData: fetchedCategories, isLoading: loadingCategoriesQuery } = useGetCategoriesQuery(null);
-    const { currentData: fetchedProductData, isLoading: loadingProductQuery } = useGetProductByIdQuery(productId!);
+    const { currentData: fetchedProductData, isLoading: loadingProductQuery, refetch: refetchProductData } = useGetProductByIdQuery(productId!);
     const [ updateProduct, { isLoading: loadingProductMutation } ] = useUpdateProductMutation();
 
     const thumbnailButtonRef = useRef<HTMLDivElement>(null);
@@ -30,12 +31,6 @@ export function EditProduct () {
     const [ thumbnail, setThumbnail ] = useState<string[]>([]);
     const [ gallery, setGallery ] = useState<string[]>([]);
     const [ formState, setFormState ] = useState<updateProductReqBodyType>({});
-    useEffect(() => {
-        setFormState(fetchedProductData?.data || {});
-        setThumbnail(fetchedProductData?.data?.thumbnail ? [ fetchedProductData.data.thumbnail ] : []);
-        setGallery(fetchedProductData?.data?.gallery || []);
-    }, [ fetchedProductData ]);
-
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = event.currentTarget;
@@ -44,30 +39,53 @@ export function EditProduct () {
 
     const handleToggleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.currentTarget;
-        setFormState({ ...formState, [name]: checked });
+        if (name === "onSale") setFormState(prev => ({ ...prev, salePrice: 0 }));
+        setFormState(prev => ({ ...prev, [name]: checked }));
     };
 
 
     const { currentData: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]);
     const [ fetchedThumbnail, setFetchedThumbnail ] = useState<IMediaRawDoc & { _id: string }>();
     useEffect(() => {
+        if (!thumbnail) return;
         refetchThumbnail();
-        setFormState({ ...formState, thumbnail: thumbnail[0] });
+        setFormState(prevFormState => ({ ...prevFormState, thumbnail: thumbnail[0] }));
     }, [ thumbnail ]);
     useEffect(() => {
-        setFetchedThumbnail(fetchedThumbnailData?.data);
+        setFetchedThumbnail(() => fetchedThumbnailData?.data);
     }, [ fetchedThumbnailData ]);
 
 
-    const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
     const { currentData: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery);
+    const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
     useEffect(() => {
+        if (!gallery) return;
         refetchGallery();
-        setFormState({ ...formState, gallery });
+        setFormState(prevFormState => ({ ...prevFormState, gallery }));
     }, [ gallery ]);
     useEffect(() => {
-        setFetchedGallery(fetchedGalleryData?.data);
+        setFetchedGallery(() => fetchedGalleryData?.data);
     }, [ fetchedGalleryData ]);
+
+
+    useEffect(() => {
+        if (!fetchedProductData?.data) return;
+        const data = fetchedProductData.data as IProductRawDoc;
+        setFormState(() => {
+            return {
+                ...data,
+                category: data.category._id,
+                gallery: data.gallery.map(item => item._id),
+            } as unknown as updateProductReqBodyType;
+        });
+        setThumbnail(() => fetchedProductData?.data?.thumbnail._id ? [ fetchedProductData.data.thumbnail._id ] : []);
+        setGallery(() => fetchedProductData?.data?.gallery.map(({ _id }: { _id: string }) => _id) || []);
+    }, [ fetchedProductData ]);
+
+    const location = useLocation();
+    useEffect(() => {
+        refetchProductData();
+    }, [ location ]);
 
 
     if (!productId) return <div>Product not found.</div>;
@@ -115,6 +133,7 @@ export function EditProduct () {
                         label={"Is active?"}
                         onChange={handleToggleChange}
                         checked={formState.isActive}
+                        serious
                     />
                     <ToggleInput
                         name={"onSale"}
@@ -132,7 +151,7 @@ export function EditProduct () {
                             value={formState.price}
                             placeholder={"Regular Price"}
                             onChange={handleInputChange}
-                            description={"Should be less than the regular price."}
+                            description={"(₹) Enter a regular price for this product when it's not on the sale."}
                         />
                         {formState.onSale && (
                             <Input
@@ -143,7 +162,7 @@ export function EditProduct () {
                                 placeholder={"Sale Price"}
                                 onChange={handleInputChange}
                                 disabled={!formState.onSale}
-                                description={"Should be less than the regular price."}
+                                description={"(₹) This price will be applicable for checkout when 'On Sale' is checked. Should be less than the regular price."}
                             />
                         )}
                         <Input
@@ -153,7 +172,7 @@ export function EditProduct () {
                             value={formState.stock}
                             placeholder={"Product Stock"}
                             onChange={handleInputChange}
-                            description={"If not set, defaults to 0."}
+                            description={"If not set, defaults to 0 which means customers will not be able to purchase this product until it's added to the stock."}
                         />
                     </div>
                 }
@@ -166,7 +185,11 @@ export function EditProduct () {
                     <option value="">Select Category</option>
                     {
                         fetchedCategories?.data.map((category: ICategoryRawDoc & { _id: string }) => (
-                            <option key={category._id} value={category._id}>{category.name}</option>
+                            <option
+                                key={category._id}
+                                value={category._id}
+                                selected={category._id === formState.category}
+                            >{category.name}</option>
                         )) ?? "Loading..."
                     }
                 </SelectInput>
@@ -229,7 +252,7 @@ export function EditProduct () {
                         </div>
                     </div>
                 </div>
-                <Button type={"submit"} loading={loadingProductMutation}>Create Product</Button>
+                <Button type={"submit"} loading={loadingProductMutation}>Update Product</Button>
             </form>
             <MediaSelector trigger={thumbnailButtonRef} setMediaState={setThumbnail} mediaState={thumbnail} limit={1} />
             <MediaSelector trigger={galleryButtonRef} setMediaState={setGallery} mediaState={gallery} />

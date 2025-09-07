@@ -17,10 +17,29 @@ import { destroyFromCloudinary } from "../utils/cloudinary.util.js";
  * GET /api/users/customers/
  */
 export async function getCustomers (req: Request, res: Response): Promise<void> {
-    const customers: Array<TUser> = await UserModel.find({ role: userRoles.Customer }, "-password");
+    const { page = 1, size = 8, keyword } = req.query;
+    const searchQuery = keyword
+        ? {
+            $or: [
+                { name: { $regex: keyword, $options: "i" } },
+                { description: { $regex: keyword, $options: "i" } },
+            ],
+        } : {};
+
+    const count = await UserModel.countDocuments({ ...searchQuery });
+    const customers: TUser[] = await UserModel
+        .find({ ...searchQuery })
+        .limit(+size)
+        .skip((+page - 1) * +size);
+
     res.json({
         success: true,
         message: `${customers.length} customer(s) found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
         data: customers,
     });
 }

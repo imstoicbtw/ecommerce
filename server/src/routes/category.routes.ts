@@ -4,8 +4,9 @@ import {
     createCategory,
     deleteCategory,
     getAllCategories,
-    getCategoryById,
-    getCategoryProducts,
+    getCategoryById, getCategoryBySlug,
+    getCategoryProductsById,
+    getCategoryProductsBySlug,
     updateCategory,
 } from "../controllers/category.controller.js";
 import { authenticate, authorize } from "../middlewares/auth.middleware.js";
@@ -39,5 +40,12 @@ categoryRouter.route("/:categoryId")
                   deleteCategory,
               );
 
-categoryRouter.route("/:categoryId/products/")
-              .get(getCategoryProducts);
+
+categoryRouter.route("/id/:categoryId/products/")
+              .get(getCategoryProductsById);
+
+categoryRouter.route("/slug/:categorySlug/")
+              .get(getCategoryBySlug);
+
+categoryRouter.route("/slug/:categorySlug/products/")
+              .get(getCategoryProductsBySlug);

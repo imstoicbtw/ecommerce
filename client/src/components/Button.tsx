@@ -3,7 +3,7 @@ import type { ComponentProps, ForwardRefExoticComponent, PropsWithoutRef, SVGPro
 import { NavLink, type To } from "react-router-dom";
 
 
-type Variant = "success" | "destructive" | "ghost" | "secondary" | "primary";
+type Variant = "success" | "destructive" | "ghost" | "secondary" | "primary" | "plain";
 type Size = "small" | "medium" | "large";
 type States = Record<string, boolean | undefined>;
 type CoreProps = {
@@ -38,6 +38,7 @@ const variantClasses: Record<Variant, string> = {
     success: "bg-green-600 hover:bg-green-700 text-white",
     destructive: "bg-red-600 hover:bg-red-700 text-white",
     ghost: "text-slate-700 hover:bg-slate-200 hover:text-slate-800",
+    plain: "text-slate-700 active:!scale-100",
 };
 
 const cn = ({
@@ -46,7 +47,7 @@ const cn = ({
     states: States,
     variant: Variant,
     size: Size,
-    className?: string
+    className?: string,
 }): string => {
     const classes: Array<string> = [];
     classes.push(coreClasses, variantClasses[variant], sizeClasses[size]);

@@ -3,7 +3,7 @@ export const AUTH_URL = "/auth";
 export const PRODUCTS_URL = "/products";
 export const USERS_URL = "/users";
 export const ORDERS_URL = "/orders";
-export const PAYPAL_URL = "/paypal";
+export const PAYMENTS_URL = "/payments";
 export const MEDIA_URL = "/media";
 export const CATEGORIES_URL = "/categories";
 
@@ -22,6 +22,7 @@ export const orderStatuses = [
     "shipped",
     "delivered",
     "cancelled",
+    "refunded",
 ] as const;
 export type OrderStatus = typeof orderStatuses[number];
 

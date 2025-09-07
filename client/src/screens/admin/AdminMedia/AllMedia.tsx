@@ -2,13 +2,24 @@ import { TrashIcon } from "@heroicons/react/24/outline/index";
 import { toast } from "react-toastify/unstyled";
 import type { IMediaRawDoc } from "../../../../../common/src/mongoose/media.types.ts";
 import { Button } from "../../../components/Button.tsx";
+import Pagination from "../../../components/Pagination.tsx";
 import { useDeleteMediaMutation, useGetMediaQuery } from "../../../redux/query/mediaApiSlice.ts";
-import type { MouseEvent } from "react";
+import { type MouseEvent, useEffect, useState } from "react";
+import { getRequestMeta } from "../../../utils/get-request-meta.util.ts";
+import { useLocation } from "react-router-dom";
 
 
 export function AllMedia () {
-    const { data, isLoading: queryLoading, error } = useGetMediaQuery(null);
+    const { search } = useLocation();
+    const params = getRequestMeta(search);
+    const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
+    const { currentData: media, isLoading: queryLoading, error, refetch: refetchProducts } = useGetMediaQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
     const [ deleteMedia, { isError, isLoading: mutationLoading } ] = useDeleteMediaMutation();
+
+    useEffect(() => {
+        refetchProducts();
+    }, [ pageSize ]);
+
 
     const deleteMediaHandler = async (event: MouseEvent<HTMLButtonElement>, mediaId: string) => {
         const currentTarget = event.currentTarget;
@@ -21,14 +32,15 @@ export function AllMedia () {
     };
 
     if (queryLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {"message" in error ? error.message : "Something went wrong, please reload this page to try again."}</div>;
-    if (!data.data.length) return <div>No media found, try uploading some.</div>;
+    if (error) return <div className={"text-red-500 italic"}>Error: {"message" in error ? error.message : "Something went wrong, please reload this page to try again."}</div>;
+    if (!media?.data.length) return <div>No media found, try uploading some.</div>;
     else return (
         <main>
+            <h2 className={"text-xl font-bold"}>All Media</h2>
             <p className={"italic text-red-500 mb-4"}>Any media items deleted from here will be then removed from everywhere.</p>
             <ul className={"grid grid-cols-4 gap-4"}>
                 {
-                    [ ...data.data ].reverse().map((media: IMediaRawDoc & { _id: string }) => (
+                    [ ...media.data ].reverse().map((media: IMediaRawDoc & { _id: string }) => (
                         <li
                             key={media._id}
                             className={"relative aspect-square flex items-start justify-end rounded-2xl overflow-hidden p-3"}
@@ -45,6 +57,7 @@ export function AllMedia () {
                     ))
                 }
             </ul>
+            <Pagination meta={media.meta} baseUrl={"/dashboard/media"} pageSize={pageSize} setPageSize={setPageSize} />
         </main>
     );
 }

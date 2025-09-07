@@ -1,7 +1,7 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline/index";
 import type { ICategoryRawDoc } from "common/dist/mongoose/category.types.ts";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../redux/query/categoriesApiSlice.ts";
 
 
@@ -25,17 +25,14 @@ type Category = {
 
 export function CategoriesTable ({ filterKey, filterValue }: Props) {
 
-    const { currentData: fetchedCategoriesData, isLoading: fetchingCategoriesData, error, refetch: refetchCategories } = useGetCategoriesQuery(null);
-    const location = useLocation();
+    const { currentData: fetchedCategoriesData, isLoading: fetchingCategoriesData, error } = useGetCategoriesQuery(null, {
+        refetchOnMountOrArgChange: true,
+    });
     const [ categories, setCategories ] = useState<Array<Category>>([]);
 
     useEffect(() => {
         setCategories(fetchedCategoriesData?.data || []);
     }, [ fetchedCategoriesData ]);
-
-    useEffect(() => {
-        refetchCategories();
-    }, [ location ]);
 
 
     if (error) return <p className={"italic text-red-500"}>Error: {"message" in error ? error.message : "Something went wrong please try reloading the page..."}</p>;
@@ -63,7 +60,7 @@ export function CategoriesTable ({ filterKey, filterValue }: Props) {
                                 <tr key={category._id} className={`*:text-slate-700 leading-tight *:p-2`}>
                                     <td className={"font-semibold"}>{category.name}</td>
                                     <td>
-                                        <Link to={`/product-category/${category.slug}`} className={"link"}>
+                                        <Link target={"_blank"} to={`/product-category/${category.slug}`} className={"link"}>
                                             <span>{category.slug}</span>
                                             <ArrowTopRightOnSquareIcon className={"w-3 h-3 inline-block ml-1"} />
                                         </Link>

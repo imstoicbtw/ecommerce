@@ -9,11 +9,12 @@ export const createOrderReqBody = zod.object({
         savedAmount: zodNumber(),
         quantity: zodNumber(),
     })).nonempty("At least one product is required to place an order."),
+    subTotal: zodNumber(),
     totalAmount: zodNumber(),
     savedAmount: zodNumber(),
+    shippingAmount: zodNumber(),
+    taxAmount: zodNumber(),
     status: zodEnum(orderStatuses),
-    paymentStatus: zodEnum(paymentStatuses),
-    paymentMethod: zodString("Payment method is invalid."),
     shippingAddress: zodAddress,
 }, { message: "This must be an object." });
 export type createOrderReqBodyType = zod.infer<typeof createOrderReqBody>;
@@ -21,5 +22,6 @@ export type createOrderReqBodyType = zod.infer<typeof createOrderReqBody>;
 
 export const updateOrderStatusReqBody = zod.object({
     status: zodEnum(orderStatuses),
+    payment: zodMongooseObjectId().optional(),
 }, { message: "This must be an object." });
 export type updateOrderStatusReqBodyType = zod.infer<typeof updateOrderStatusReqBody>;

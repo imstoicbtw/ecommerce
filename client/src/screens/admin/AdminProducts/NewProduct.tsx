@@ -18,7 +18,7 @@ import { useCreateProductMutation } from "../../../redux/query/productsApiSlice.
 
 export function NewProduct () {
 
-    const { data } = useGetCategoriesQuery(null);
+    const { data: fetchedCategories } = useGetCategoriesQuery(null);
     const [ createProduct, { isLoading: loadingProductMutation } ] = useCreateProductMutation();
 
     const thumbnailButtonRef = useRef<HTMLDivElement>(null);
@@ -28,8 +28,8 @@ export function NewProduct () {
     const [ formState, setFormState ] = useState<createProductReqBodyType>({
         name: "",
         description: "",
-        price: NaN,
-        stock: NaN,
+        price: 0,
+        stock: 0,
         onSale: false,
         isActive: true,
         category: "",
@@ -45,13 +45,15 @@ export function NewProduct () {
 
     const handleToggleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.currentTarget;
-        setFormState({ ...formState, [name]: checked });
+        if (name === "onSale") setFormState(prev => ({ ...prev, salePrice: 0 }));
+        setFormState(prev => ({ ...prev, [name]: checked }));
     };
 
 
-    const { currentData: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]);
+    const { currentData: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0], { skip: !thumbnail[0] });
     const [ fetchedThumbnail, setFetchedThumbnail ] = useState<IMediaRawDoc & { _id: string }>();
     useEffect(() => {
+        if (!thumbnail.length) return;
         refetchThumbnail();
         setFormState({ ...formState, thumbnail: thumbnail[0] });
     }, [ thumbnail ]);
@@ -61,8 +63,11 @@ export function NewProduct () {
 
 
     const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
-    const { currentData: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery);
+    const { currentData: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery, {
+        skip: !gallery.length,
+    });
     useEffect(() => {
+        if (!gallery.length) return;
         refetchGallery();
         setFormState({ ...formState, gallery });
     }, [ gallery ]);
@@ -113,6 +118,7 @@ export function NewProduct () {
                         label={"Is active?"}
                         onChange={handleToggleChange}
                         checked={formState.isActive}
+                        serious
                     />
                     <ToggleInput
                         name={"onSale"}
@@ -130,7 +136,7 @@ export function NewProduct () {
                             value={formState.price}
                             placeholder={"Regular Price"}
                             onChange={handleInputChange}
-                            description={"Should be less than the regular price."}
+                            description={"(₹) Enter a regular price for this product when it's not on the sale."}
                         />
                         {formState.onSale && (
                             <Input
@@ -141,7 +147,7 @@ export function NewProduct () {
                                 placeholder={"Sale Price"}
                                 onChange={handleInputChange}
                                 disabled={!formState.onSale}
-                                description={"Should be less than the regular price."}
+                                description={"(₹) This price will be applicable for checkout when 'On Sale' is checked. Should be less than the regular price."}
                             />
                         )}
                         <Input
@@ -151,7 +157,7 @@ export function NewProduct () {
                             value={formState.stock}
                             placeholder={"Product Stock"}
                             onChange={handleInputChange}
-                            description={"If not set, defaults to 0."}
+                            description={"If not set, defaults to 0 which means customers will not be able to purchase this product until it's added to the stock."}
                         />
                     </div>
                 }
@@ -162,7 +168,7 @@ export function NewProduct () {
                 >
                     <option value="">Select Category</option>
                     {
-                        data?.data.map((category: ICategoryRawDoc & { _id: string }) => (
+                        fetchedCategories?.data.map((category: ICategoryRawDoc & { _id: string }) => (
                             <option key={category._id} value={category._id}>{category.name}</option>
                         )) ?? "Loading..."
                     }

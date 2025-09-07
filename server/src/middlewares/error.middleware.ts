@@ -19,7 +19,7 @@ export default function (error: GlobalError, _req: Request, res: Response, _next
         message = `${name}: Invalid '${kind}' received!`;
     } else if (name === "ValidationError") {
         statusCode = 400;
-        message = "One or more required field is is missing or invalid!";
+        message = "One or more required field is missing or invalid!";
     } else if (name === "ZodValidationError") {
         statusCode = 400;
         message = errors as unknown as string;

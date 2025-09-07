@@ -11,10 +11,30 @@ import { OrderItemModel } from "../models/subdocs/order-item.model.js";
  * GET /api/orders/
  */
 export async function getAllOrders (req: Request, res: Response): Promise<void> {
+    const { page = 1, size = 8, keyword } = req.query;
+    const searchQuery = keyword
+        ? {
+            $or: [
+                { name: { $regex: keyword, $options: "i" } },
+                { description: { $regex: keyword, $options: "i" } },
+            ],
+        } : {};
+
+    const count = await OrderModel.countDocuments({ ...searchQuery });
+    const products: TOrder[] = await OrderModel
+        .find({ ...searchQuery })
+        .limit(+size)
+        .skip((+page - 1) * +size);
+
     const orders: Array<TOrder> = await OrderModel.find();
     res.json({
         success: true,
         message: `${orders.length} order(s) found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
         data: orders,
     });
 }
@@ -26,10 +46,10 @@ export async function getAllOrders (req: Request, res: Response): Promise<void> 
  * POST /api/orders/
  */
 export async function createOrder (req: Request, res: Response): Promise<void> {
-    const { body }: { body: createOrderReqBodyType } = req;
+    const { products, ...body } = req.body as createOrderReqBodyType;
     const { user } = req;
-    const products: Array<TOrderItem> = body.products.map((item): TOrderItem => new OrderItemModel(item));
-    const order: TOrder = new OrderModel({ ...body, products, user: user.id });
+    const productDocs: Array<TOrderItem> = products.map((item): TOrderItem => new OrderItemModel(item));
+    const order: TOrder = new OrderModel({ ...body, products: productDocs, user: user._id });
     const result = await order.save();
     res.json({
         success: true,
@@ -46,10 +66,22 @@ export async function createOrder (req: Request, res: Response): Promise<void> {
  */
 export async function getMyOrders (req: Request, res: Response): Promise<void> {
     const { user } = req;
-    const orders: Array<TOrder> = await OrderModel.find({ user: user.id });
+    const { page = 1, size = 8 } = req.query;
+
+    const count = await OrderModel.countDocuments();
+    const orders: TOrder[] = await OrderModel
+        .find({ user: user.id })
+        .limit(+size)
+        .skip((+page - 1) * +size);
+
     res.json({
         success: true,
         message: `${orders.length} order(s) found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
         data: orders,
     });
 }
@@ -62,7 +94,7 @@ export async function getMyOrders (req: Request, res: Response): Promise<void> {
  */
 export async function getMyOrderById (req: Request, res: Response): Promise<void> {
     const { user, params } = req;
-    const order: TOrder | null = await OrderModel.findById(params.orderId);
+    const order: TOrder | null = await OrderModel.findById(params.orderId).populate(["payment"]);
     if (!order) {
         res.status(404);
         throw new Error("Order not found.");
@@ -81,7 +113,7 @@ export async function getMyOrderById (req: Request, res: Response): Promise<void
 
 /**
  * Get order by id.
- * @access Any authenticated user.
+ * @access [admin].
  * GET /api/orders/:orderId/
  */
 export async function getOrderById (req: Request, res: Response): Promise<void> {
@@ -106,13 +138,13 @@ export async function getOrderById (req: Request, res: Response): Promise<void> 
  */
 export async function updateOrderStatus (req: Request, res: Response): Promise<void> {
     const { orderId } = req.params;
-    const { status }: updateOrderStatusReqBodyType = req.body;
+    const { status, payment }: updateOrderStatusReqBodyType = req.body;
     const order: TOrder | null = await OrderModel.findById(orderId);
     if (!order) {
         res.status(404);
         throw new Error("Order not found.");
     }
-    order.set("status", status);
+    order.set({ "status": status, payment: order.payment ?? payment });
     const result: TOrder = await order.save();
     res.json({
         success: true,
@@ -138,6 +170,9 @@ export async function cancelOrder (req: Request, res: Response): Promise<void> {
     } else if (order.user.toString() !== user.id) {
         res.status(401);
         throw new Error("You're not allowed to cancel this order!");
+    } else if (order.status !== "delivered") {
+        res.status(400);
+        throw new Error("Order already delivered.");
     }
     order.set("status", "cancelled");
     const result: TOrder = await order.save();

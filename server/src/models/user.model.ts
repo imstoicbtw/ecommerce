@@ -1,12 +1,10 @@
 import bcrypt from "bcryptjs";
-
-import { HydratedDocument, Model, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import mongooseLeanVirtuals from "mongoose-lean-virtuals";
-import { type UserRole, userRoles } from "../../../common/dist/constants.js";
+import { userRoles } from "../../../common/dist/constants.js";
 import type { IUserMethods, IUserRawDoc, IUserVirtuals, TUser, TUserModel } from "../../../common/dist/mongoose/user.types.js";
 import { mediaSchema } from "./media.model.js";
 import { addressSchema } from "./subdocs/address.model.js";
-import { cartItemSchema } from "./subdocs/cart-item.model.js";
 import { nameSchema } from "./subdocs/name.model.js";
 
 
@@ -40,10 +38,6 @@ const userSchema: Schema = new Schema<IUserRawDoc, TUserModel, IUserMethods, {},
     },
     addresses: {
         type: [ addressSchema ],
-        default: [],
-    },
-    cartItems: {
-        type: [ cartItemSchema ],
         default: [],
     },
     refreshToken: {

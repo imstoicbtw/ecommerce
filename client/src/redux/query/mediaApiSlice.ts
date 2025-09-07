@@ -3,12 +3,18 @@ import { apiSlice } from "./baseQuery.ts";
 
 // TODO: add upload and update media mutations.
 
+type RequestQuery = {
+    size?: number;
+    page?: number;
+    keyword?: string;
+}
+
 export const mediaApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getMedia: builder.query({
-            query: () => ({
-                url: MEDIA_URL,
-            }),
+            query: ({ size, page, keyword }: RequestQuery) => (
+                `${MEDIA_URL}/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            ),
         }),
         getGallery: builder.query({
             query: (gallery: string[]) => ({

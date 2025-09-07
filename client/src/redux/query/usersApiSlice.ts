@@ -3,11 +3,17 @@ import type { addNewAddressReqBodyType, addToCartReqBodyType, updateAddressReqBo
 import { apiSlice } from "./baseQuery.ts";
 
 
+type RequestQuery = {
+    size?: number;
+    page?: number;
+    keyword?: string;
+}
+
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getCustomers: builder.query({
-            query: () => ({
-                url: `${USERS_URL}/customers`,
+            query: ({ size, page, keyword }: RequestQuery) => ({
+                url: `${USERS_URL}/customers/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`,
             }),
         }),
         getUserById: builder.query({

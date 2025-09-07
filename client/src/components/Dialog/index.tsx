@@ -73,7 +73,7 @@ export default function Dialog ({trigger, heading, submitLabel, submitAction, ch
 
     if (!isOpen) return null;
 
-    const containerClasses: string = `z-[9998] grid gap-3 min-w-md max-w-lg p-5 rounded-2xl bg-white ${className ?? ""}`;
+    const containerClasses: string = `z-[9998] grid gap-3 max-h-[90vh] min-w-md max-w-lg p-5 rounded-2xl bg-white overflow-auto ${className ?? ""}`;
 
     return (
         <div className={"grid place-items-center fixed inset-0 z-[9997] before:absolute before:inset-0 before:bg-slate-900 before:opacity-50"}>

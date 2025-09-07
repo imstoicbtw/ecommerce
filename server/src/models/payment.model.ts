@@ -17,13 +17,10 @@ const paymentSchema: Schema = new Schema<IPaymentRawDoc, TPaymentModel, IPayment
         type: Number,
         required: [ true, "Amount is required." ],
     },
-    paymentMethod: {
-        type: String,
-    },
     status: {
         type: String,
         enum: {
-            values: [ "pending", "completed", "failed" ],
+            values: [ "completed", "failed", "pending" ],
             message: "{VALUE} is not a valid payment status.",
         },
         default: "pending",
@@ -36,9 +33,17 @@ const paymentSchema: Schema = new Schema<IPaymentRawDoc, TPaymentModel, IPayment
         type: String,
         required: [ true, "Payment Gateway is required." ],
         enum: {
-            values: [ "razorpay", "cod" ],
+            values: [ "paypal", "cod" ],
             message: "{VALUE} is not a valid payment gateway.",
         },
+    },
+    update_time: {
+        type: String,
+        required: [ true, "Update time is required." ],
+    },
+    email_address: {
+        type: String,
+        required: [ true, "Payment email address is required." ],
     },
 }, { timestamps: true });
 

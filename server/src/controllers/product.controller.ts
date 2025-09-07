@@ -45,11 +45,87 @@ export async function deleteProduct (req: Request, res: Response): Promise<void>
  * ACCESS OPEN
  * GET /api/products
  */
-export async function getProducts (_req: Request, res: Response): Promise<void> {
-    const products: TProduct[] = await ProductModel.find().populate([ "thumbnail", "gallery", "category" ]);
+export async function getProducts (req: Request, res: Response): Promise<void> {
+    const { page = 1, size = 8, keyword } = req.query;
+    const searchQuery = keyword
+        ? {
+            $or: [
+                { name: { $regex: keyword, $options: "i" } },
+                { description: { $regex: keyword, $options: "i" } },
+            ],
+        } : {};
+
+    const count = await ProductModel.countDocuments({ isActive: true, ...searchQuery });
+    const products: TProduct[] = await ProductModel
+        .find({ isActive: true, ...searchQuery })
+        .limit(+size)
+        .skip((+page - 1) * +size)
+        .populate([ "thumbnail", "category" ]);
+
     res.json({
         success: true,
         message: `${products.length} product${products.length === 1 ? "" : "s"} found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
+        data: products,
+    });
+}
+
+
+/**
+ * Get products on sale.
+ * ACCESS OPEN
+ * GET /api/products/on-sale/
+ */
+export async function getProductsOnSale (req: Request, res: Response): Promise<void> {
+    const { page = 1, size = 8 } = req.query;
+
+    const count = await ProductModel.countDocuments({ onSale: true, isActive: true });
+    const products: TProduct[] = await ProductModel
+        .find({ onSale: true, isActive: true })
+        .limit(+size)
+        .skip((+page - 1) * +size)
+        .populate([ "thumbnail", "category" ]);
+
+    res.json({
+        success: true,
+        message: `${products.length} product${products.length === 1 ? "" : "s"} found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
+        data: products,
+    });
+}
+
+
+/**
+ * Get inactive products.
+ * ACCESS [admin, manager]
+ * GET /api/products/inactive/
+ */
+export async function getInactiveProducts (req: Request, res: Response): Promise<void> {
+    const { page = 1, size = 8 } = req.query;
+
+    const count = await ProductModel.countDocuments({ isActive: false });
+    const products: TProduct[] = await ProductModel
+        .find({ isActive: false })
+        .limit(+size)
+        .skip((+page - 1) * +size)
+        .populate([ "thumbnail", "category" ]);
+
+    res.json({
+        success: true,
+        message: `${products.length} product${products.length === 1 ? "" : "s"} found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
         data: products,
     });
 }
@@ -62,7 +138,7 @@ export async function getProducts (_req: Request, res: Response): Promise<void> 
  */
 export async function getProductById (req: Request, res: Response): Promise<void> {
     const { productId } = req.params;
-    const product: TProduct | null = await ProductModel.findById(productId);
+    const product: TProduct | null = await ProductModel.findById(productId).populate([ "thumbnail", "gallery", "category" ]);
     if (!product) {
         res.status(404);
         throw new Error("Product not found.");

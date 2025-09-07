@@ -18,7 +18,27 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
             }),
             keepUnusedDataFor: 5,
         }),
+        getCategoryProductsById: builder.query({
+            query: (categoryId: string) => ({
+                url: `${CATEGORIES_URL}/id/${categoryId}/products`,
+            }),
+        }),
+        getCategoryProductsBySlug: builder.query({
+            query: (categorySlug: string) => ({
+                url: `${CATEGORIES_URL}/slug/${categorySlug}/products`,
+            }),
+        }),
+        getCategoryById: builder.query({
+            query: (categoryId: string) => ({
+                url: `${CATEGORIES_URL}/${categoryId}`,
+            }),
+        }),
+        getCategoryBySlug: builder.query({
+            query: (categorySlug: string) => ({
+                url: `${CATEGORIES_URL}/slug/${categorySlug}`,
+            }),
+        }),
     }),
 });
 
-export const {useCreateCategoryMutation, useGetCategoriesQuery} = categoriesApiSlice;
+export const { useCreateCategoryMutation, useGetCategoriesQuery, useGetCategoryProductsByIdQuery, useGetCategoryProductsBySlugQuery, useGetCategoryByIdQuery, useGetCategoryBySlugQuery } = categoriesApiSlice;

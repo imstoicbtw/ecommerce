@@ -14,7 +14,7 @@ export const orderItemSchema: Schema = new Schema<IOrderItemRawDoc, TOrderItemMo
     },
     savedAmount: {
         type: Number,
-        default: 0,
+        required: [ true, "Saved amount is required." ],
     },
     quantity: {
         type: Number,

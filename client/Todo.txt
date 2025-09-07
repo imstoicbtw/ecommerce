@@ -14,7 +14,7 @@
 ❌ Toast/Alert (basic notifications)
 ❌ Skeleton loaders (for product grid, details, cart items)
 
-3. Layout Pages (UI only, dummy data)
+3. Layout Pages (UI only, dummy fetchedCategories)
 ❌ Home Page → Hero section + product grid (dummy products)
 ❌ Auth Pages → Login, Register, Forgot Password forms
 ❌ Products Page → Filter sidebar + product cards grid

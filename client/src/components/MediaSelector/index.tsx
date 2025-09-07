@@ -15,7 +15,7 @@ type Props = {
 
 export default function MediaSelector ({ trigger, mediaState, setMediaState, limit = Infinity }: Props) {
 
-    const { data } = useGetMediaQuery(null);
+    const { currentData: media } = useGetMediaQuery({});
     const [ isOpen, setIsOpen ] = useState<boolean>(false);
     const [ selectedMedia, setSelectedMedia ] = useState<string[]>([]);
     const location = useLocation();
@@ -65,7 +65,7 @@ export default function MediaSelector ({ trigger, mediaState, setMediaState, lim
                 <div className="flex-grow h-[500px] max-h-[60vh] overflow-y-auto">
                     <div className={"grid grid-cols-6 gap-2"}>
                         {
-                            [ ...data.data ].reverse().map(({ _id: id, url, name }: IMediaRawDoc & { _id: string; }) => (
+                            [ ...media.data ].reverse().map(({ _id: id, url, name }: IMediaRawDoc & { _id: string; }) => (
                                 <div
                                     key={id}
                                     className={`relative cursor-pointer rounded-xl overflow-hidden border-4 ${selectedMedia.includes(id) ? "border-blue-500" : "border-transparent"}`}

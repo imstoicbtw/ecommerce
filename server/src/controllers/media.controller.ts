@@ -1,7 +1,6 @@
 import { UploadApiResponse } from "cloudinary";
 import type { TMedia, TMediaLean } from "common/dist/mongoose/media.types.js";
 import { type NextFunction, Request, Response } from "express";
-import * as mongoose from "mongoose";
 import { DeleteResult } from "mongoose";
 import { MediaModel } from "../models/media.model.js";
 import { destroyFromCloudinary, uploadToCloudinary } from "../utils/cloudinary.util.js";
@@ -13,10 +12,29 @@ import { destroyFromCloudinary, uploadToCloudinary } from "../utils/cloudinary.u
  * GET /api/media/
  */
 export async function getMedia (req: Request, res: Response): Promise<void> {
-    const media: Array<TMedia> = await MediaModel.find();
+    const { page = 1, size = 8, keyword } = req.query;
+    const searchQuery = keyword
+        ? {
+            $or: [
+                { name: { $regex: keyword, $options: "i" } },
+                { description: { $regex: keyword, $options: "i" } },
+            ],
+        } : {};
+
+    const count = await MediaModel.countDocuments({ ...searchQuery });
+    const media: TMedia[] = await MediaModel
+        .find({ ...searchQuery })
+        .limit(+size)
+        .skip((+page - 1) * +size);
+
     res.json({
         success: true,
         message: `${media.length} media item(s) found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
         data: media,
     });
 }

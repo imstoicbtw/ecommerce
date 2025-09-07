@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 
+@supports (font-variation-settings: normal) {
+    :root {
+        font-family: InterVariable, sans-serif;
+        @apply text-slate-700;
+    }
+}
+
 * {
     @apply transition;
 }
@@ -10,12 +17,22 @@
     font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
 }
 
-@supports (font-variation-settings: normal) {
-    :root {
-        font-family: InterVariable, sans-serif;
-    }
+body {
+    @apply overflow-y-scroll;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    @apply hidden;
 }
 
 a.link {
-    @apply text-blue-500 hover:text-blue-600 hover:underline underline-offset-2 decoration-1;
+    @apply text-blue-500 hover:text-blue-600 hover:underline underline-offset-3 decoration-1;
+}
+
+main {
+    @apply grow;
+}
+
+main > section.inner, header > section.inner, footer > section.inner {
+    @apply w-11/12 max-w-7xl mx-auto;
 }

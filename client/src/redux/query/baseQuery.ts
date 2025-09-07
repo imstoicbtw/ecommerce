@@ -6,7 +6,7 @@ import { BASE_URL } from "../../../../common/dist/constants.js";
 const baseQuery = fetchBaseQuery({baseUrl: BASE_URL});
 
 export const apiSlice = createApi({
-    reducerPath: "server",
+    reducerPath: "api",
     baseQuery,
     tagTypes: [ "Category", "Product", "User", "Order", "Media" ],
     endpoints: () => ({}),
