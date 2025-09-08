@@ -20,7 +20,7 @@ type Props = PropsOptional | PropsRequired;
 export function CustomersTable ({ filterKey, filterValue }: Props) {
 
     const [ updateCustomerStatus, { isLoading: updatingCustomerStatus } ] = useUpdateUserStatusMutation();
-    const { currentData: fetchedCustomersData, isLoading: fetchingCustomerData, error } = useGetCustomersQuery({ size: 1000 }, { refetchOnMountOrArgChange: true });
+    const { data: fetchedCustomersData, isLoading: fetchingCustomerData, error } = useGetCustomersQuery({ size: 1000 }, { refetchOnMountOrArgChange: true });
     const [ customers, setCustomers ] = useState<Array<IUserRawDoc & { _id: string }>>([]);
     const [ customersLength, setCustomersLength ] = useState<number>(0);
 

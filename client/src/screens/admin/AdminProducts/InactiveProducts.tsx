@@ -17,11 +17,11 @@ export function InactiveProducts () {
     const { search } = useLocation();
     const params = getRequestMeta(search);
     const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
-    const { currentData: products, isLoading: loadingProducts, error: productsError, refetch: refetchProducts } = useGetInactiveProductsQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
+    const { data: products, isLoading: loadingProducts, error: productsError, refetch: refetchProducts } = useGetInactiveProductsQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
         refetchProducts();
-    }, [ pageSize ]);
+    }, [pageSize, refetchProducts]);
 
     if (loadingProducts || !products) return <Loader message={"Loading products..."} />;
     if (productsError) return <main className={"text-red-500 italic"}>Error: Something went wrong, please try reloading the page.</main>;

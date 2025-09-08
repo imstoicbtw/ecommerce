@@ -4,8 +4,8 @@ import {
     cancelOrder,
     createOrder,
     getAllOrders,
-    getMyOrderById,
-    getOrderById,
+    getMyOrderById, getMyOrders,
+    getOrderById, getOrdersByStatus,
     updateOrderStatus,
 } from "../controllers/order.controller.js";
 import { authenticate, authorize } from "../middlewares/auth.middleware.js";
@@ -28,6 +28,18 @@ orderRouter.route("/")
                createOrder,
            );
 
+orderRouter.route("/status/:status")
+           .get(
+               authenticate,
+               authorize(userRoles.Admin, userRoles.Manager),
+               getOrdersByStatus,
+           );
+
+orderRouter.route("/current-user")
+           .get(
+               authenticate,
+               getMyOrders,
+           );
 
 orderRouter.route("/current-user/:orderId")
            .get(

@@ -50,7 +50,7 @@ export function NewProduct () {
     };
 
 
-    const { currentData: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0], { skip: !thumbnail[0] });
+    const { data: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0], { skip: !thumbnail[0] });
     const [ fetchedThumbnail, setFetchedThumbnail ] = useState<IMediaRawDoc & { _id: string }>();
     useEffect(() => {
         if (!thumbnail.length) return;
@@ -63,7 +63,7 @@ export function NewProduct () {
 
 
     const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
-    const { currentData: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery, {
+    const { data: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery, {
         skip: !gallery.length,
     });
     useEffect(() => {

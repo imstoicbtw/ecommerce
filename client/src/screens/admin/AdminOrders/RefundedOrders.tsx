@@ -10,12 +10,12 @@ import { useLocation } from "react-router-dom";
 
 type Order = IOrderRawDoc & { _id: string };
 
-export function CancelledOrders () {
+export function RefundedOrders () {
 
     const { search } = useLocation();
     const params = getRequestMeta(search);
     const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
-    const { data: orders, isLoading: loadingOrders, error: ordersError, refetch: refetchOrders } = useGetOrdersByStatusQuery({ ...params, size: pageSize, status: "cancelled" }, { refetchOnMountOrArgChange: true });
+    const { data: orders, isLoading: loadingOrders, error: ordersError, refetch: refetchOrders } = useGetOrdersByStatusQuery({ ...params, size: pageSize, status: "refunded" }, { refetchOnMountOrArgChange: true });
 
 
     useEffect(() => {
@@ -27,12 +27,12 @@ export function CancelledOrders () {
 
     return (
         <main>
-            <h2 className={"text-xl font-bold mb-4"}>Cancelled Orders</h2>
+            <h2 className={"text-xl font-bold mb-4"}>Refunded Orders</h2>
             {!orders?.data?.length
-                ? <p>No cancelled orders found.</p>
+                ? <p>No refunded orders found.</p>
                 : <>
                     <OrdersTable receivedOrders={orders.data as Order[]} />
-                    <Pagination meta={orders.meta} baseUrl={"/dashboard/orders/cancelled"} pageSize={pageSize} setPageSize={setPageSize} />
+                    <Pagination meta={orders.meta} baseUrl={"/dashboard/orders/refunded"} pageSize={pageSize} setPageSize={setPageSize} />
                 </>
             }
         </main>

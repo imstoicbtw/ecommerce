@@ -1,6 +1,5 @@
-export { MainScreen as AdminOrders } from "./MainScreen";
 export { AllOrders } from "./AllOrders";
 export { PendingOrders } from "./PendingOrders";
-export { CompletedOrders } from "./CompletedOrders";
+export { DeliveredOrders } from "./DeliveredOrders.tsx";
 export { CancelledOrders } from "./CancelledOrders";
-export { ReturnedOrders } from "./ReturnedOrders";
+export { RefundedOrders } from "./RefundedOrders.tsx";

@@ -4,13 +4,14 @@ import type { IProductReviewRawDoc } from "common/dist/mongoose/product.types.ts
 type Props = {
     reviews: IProductReviewRawDoc[];
     expanded?: boolean;
+    single?: number;
 }
 
-export default function Rating ({ reviews, expanded = false }: Props) {
+export default function Rating ({ reviews, expanded = false, single }: Props) {
 
     const getRating = () => {
         if (!reviews.length) return 0;
-        const rating = reviews.reduce((acc, review) => acc + review.rating, 0) / 5;
+        const rating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
         return rating;
     };
 
@@ -40,13 +41,12 @@ export default function Rating ({ reviews, expanded = false }: Props) {
     return (
         <div className={"max-w-max"}>
             <div className={`flex items-center ${expanded && "gap-0.5"}`}>
-                {getStars(getRating()).map((Icon, index) => (
-                    // <Icon key={`rating_icon_${index}`} className={`text-yellow-600 ${expanded ? "size-8" : "size-4"}`} />
+                {getStars(single ?? getRating()).map((Icon, index) => (
                     <span className={`text-yellow-600 ${expanded ? "size-7" : "size-4"}`} key={"rating_star_con" + index}>{Icon}</span>
                 ))}
-                {getRating() > 0 && <span className={"text-sm ml-1 leading-0"}>({reviews.length})</span>}
+                {!single && getRating() > 0 && <span className={`ml-1 leading-0 ${expanded ? "text-lg" : "text-sm"}`}>({reviews.length})</span>}
             </div>
-            {expanded && !reviews.length && (<div className={"italic text-center"}>No reviews yet.</div>)}
+            {!single && expanded && !reviews.length && (<div className={"italic text-center"}>No reviews yet.</div>)}
         </div>
     );
 }

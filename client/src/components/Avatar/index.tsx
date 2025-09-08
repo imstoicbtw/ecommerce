@@ -4,7 +4,7 @@ import AvatarContainer from "./AvatarContainer.tsx";
 
 
 type CoreProps = {
-    size?: "small" | "medium" | "large";
+    size?: "small" | "medium" | "large" | "huge";
     fallback?: string;
 };
 type ImageProps = {} & CoreProps & ComponentProps<"img">;

@@ -17,7 +17,7 @@ export function AllProducts () {
     const { search } = useLocation();
     const params = getRequestMeta(search);
     const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
-    const { currentData: products, isLoading: loadingProducts, error: productsError, refetch: refetchProducts } = useGetProductsQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
+    const { data: products, isLoading: loadingProducts, error: productsError, refetch: refetchProducts } = useGetProductsQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
 
     useEffect(() => {
         refetchProducts();

@@ -16,8 +16,8 @@ type Product = Omit<IProductRawDoc, "category" | "thumbnail" | "gallery"> & {
 }
 
 export function Home () {
-    const { currentData: fetchedAllProducts, isLoading: loadingAllProducts, error: allProductsError } = useGetProductsQuery({}, { refetchOnMountOrArgChange: true });
-    const { currentData: fetchedOnSaleProducts, isLoading: loadingOnSaleProducts, error: onSaleProductsError } = useGetProductsOnSaleQuery({}, { refetchOnMountOrArgChange: true });
+    const { data: fetchedAllProducts, isLoading: loadingAllProducts, error: allProductsError } = useGetProductsQuery({}, { refetchOnMountOrArgChange: true });
+    const { data: fetchedOnSaleProducts, isLoading: loadingOnSaleProducts, error: onSaleProductsError } = useGetProductsOnSaleQuery({}, { refetchOnMountOrArgChange: true });
     const recentlyViewedProducts = useSelector((state: ReturnType<typeof store.getState>) => state.recentlyViewed);
 
     return (

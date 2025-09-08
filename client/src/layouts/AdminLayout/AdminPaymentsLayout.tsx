@@ -12,10 +12,6 @@ const content: AdminHeaderContent = {
     },
     navigation: [
         {
-            label: "All Payments",
-            to: "/dashboard/payments/all",
-        },
-        {
             label: "Successful Payments",
             to: "/dashboard/payments/successful",
         },

@@ -37,11 +37,10 @@ export const submitReviewReqBody = zod.object({
     rating: zodNumber({ message: "This must be a number." })
         .refine(rating => rating >= 1 && rating <= 5, "This must be a number between 1 and 5."),
     comment: zodString("Comment is not valid.", { min: 20 }),
-    user: zodMongooseObjectId(),
 }, { message: "This must be an object." });
 export type submitReviewReqBodyType = zod.infer<typeof submitReviewReqBody>;
 
 
 // * editReview
-export const editReviewReqBody = submitReviewReqBody.omit({ user: true });
+export const editReviewReqBody = submitReviewReqBody.partial();
 export type editReviewReqBodyType = zod.infer<typeof editReviewReqBody>;

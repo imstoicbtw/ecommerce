@@ -11,10 +11,11 @@ import { AllCategories } from "../screens/admin/AdminCategories";
 import { AllCustomers, InactiveCustomers } from "../screens/admin/AdminCustomers";
 import { AllDisputes, ClosedDisputes, OpenDisputes } from "../screens/admin/AdminDisputes/";
 import { AllMedia } from "../screens/admin/AdminMedia";
-import { AdminOrders, AllOrders, CancelledOrders, CompletedOrders, PendingOrders, ReturnedOrders } from "../screens/admin/AdminOrders";
+import { AllOrders, CancelledOrders, DeliveredOrders, PendingOrders, RefundedOrders } from "../screens/admin/AdminOrders";
+import { OrderView } from "../screens/admin/AdminOrders/OrderView.tsx";
 import { AllProducts, EditProduct, InactiveProducts, NewProduct, OnSaleProducts } from "../screens/admin/AdminProducts";
 import AdminHome from "../screens/AdminHome.tsx";
-import { AdminPayments, AllPayments, FailedPayments, SuccessfulPayments } from "../screens/admin/AdminPayments";
+import { AllPayments, FailedPayments, SuccessfulPayments } from "../screens/admin/AdminPayments";
 
 
 export const AdminRouter: RouteObject = {
@@ -31,10 +32,6 @@ export const AdminRouter: RouteObject = {
             children: [
                 {
                     path: "",
-                    Component: AdminOrders,
-                },
-                {
-                    path: "all",
                     Component: AllOrders,
                 },
                 {
@@ -42,16 +39,20 @@ export const AdminRouter: RouteObject = {
                     Component: PendingOrders,
                 },
                 {
-                    path: "completed",
-                    Component: CompletedOrders,
+                    path: "delivered",
+                    Component: DeliveredOrders,
                 },
                 {
                     path: "cancelled",
                     Component: CancelledOrders,
                 },
                 {
-                    path: "returned",
-                    Component: ReturnedOrders,
+                    path: "refunded",
+                    Component: RefundedOrders,
+                },
+                {
+                    path: "order/:orderId",
+                    Component: OrderView,
                 },
             ],
         },
@@ -61,10 +62,6 @@ export const AdminRouter: RouteObject = {
             children: [
                 {
                     path: "",
-                    Component: AdminPayments,
-                },
-                {
-                    path: "all",
                     Component: AllPayments,
                 },
                 {

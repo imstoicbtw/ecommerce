@@ -13,7 +13,7 @@ export function AllMedia () {
     const { search } = useLocation();
     const params = getRequestMeta(search);
     const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
-    const { currentData: media, isLoading: queryLoading, error, refetch: refetchProducts } = useGetMediaQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
+    const { data: media, isLoading: queryLoading, error, refetch: refetchProducts } = useGetMediaQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
     const [ deleteMedia, { isError, isLoading: mutationLoading } ] = useDeleteMediaMutation();
 
     useEffect(() => {

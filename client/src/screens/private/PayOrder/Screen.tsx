@@ -14,7 +14,7 @@ type Props = {
 export function Screen ({ paypalClientId }: Props) {
     const { orderId } = useParams();
 
-    const { currentData: order, isLoading: loadingOrder, error: orderError, refetch: refetchOrder } = useGetMyOrderByIdQuery(orderId!);
+    const { data: order, isLoading: loadingOrder, error: orderError, refetch: refetchOrder } = useGetMyOrderByIdQuery(orderId!);
 
     const [ createPayment, { isLoading: loadingPaymentMutation } ] = useCreatePaymentMutation();
     const [ updateOrderStatus ] = useUpdateOrderStatusMutation();
@@ -112,8 +112,8 @@ export function Screen ({ paypalClientId }: Props) {
     // };
 
 
-    const onApprove = (_data, actions) => {
-        return actions.order.capture().then(async function (details) {
+    const onApprove = (_data: any, actions: any) => {
+        return actions.order.capture().then(async function (details: any) {
             try {
                 const payment = await createPayment({
                     order: orderId!,
@@ -135,15 +135,15 @@ export function Screen ({ paypalClientId }: Props) {
         });
     };
 
-    const onError = error => {
+    const onError = (error: any) => {
         console.error("Error: ", error);
         toast.error(error?.message || error?.data?.message || "Something went wrong, please try again later...");
     };
 
-    const createOrder = (data, actions) => {
+    const createOrder = (_data: any, actions: any) => {
         return actions.order.create({
             purchase_units: [ { amount: { value: order.data.totalAmount } } ],
-        }).then(orderId => orderId);
+        }).then((orderId: any) => orderId);
     };
 
 

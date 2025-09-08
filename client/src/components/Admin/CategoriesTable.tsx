@@ -25,7 +25,7 @@ type Category = {
 
 export function CategoriesTable ({ filterKey, filterValue }: Props) {
 
-    const { currentData: fetchedCategoriesData, isLoading: fetchingCategoriesData, error } = useGetCategoriesQuery(null, {
+    const { data: fetchedCategoriesData, isLoading: fetchingCategoriesData, error } = useGetCategoriesQuery(null, {
         refetchOnMountOrArgChange: true,
     });
     const [ categories, setCategories ] = useState<Array<Category>>([]);

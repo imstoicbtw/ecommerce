@@ -1,6 +1,7 @@
 import { IProductRawDoc } from "common/dist/mongoose/product.types.js";
 import { model, Schema } from "mongoose";
 import type { IProductMethods, IProductVirtuals, TProduct, TProductModel } from "../../../common/dist/mongoose/product.types.js";
+import { productReviewSchema } from "./subdocs/product-review.model.js";
 
 
 const productSchema: Schema = new Schema<IProductRawDoc, TProductModel, IProductMethods, {}, IProductVirtuals>({
@@ -55,8 +56,7 @@ const productSchema: Schema = new Schema<IProductRawDoc, TProductModel, IProduct
         default: [],
     },
     reviews: {
-        type: [ Schema.Types.ObjectId ],
-        ref: "Review",
+        type: [ productReviewSchema ],
         default: [],
     },
 }, { timestamps: true });

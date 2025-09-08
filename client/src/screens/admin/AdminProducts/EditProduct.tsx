@@ -22,8 +22,8 @@ export function EditProduct () {
 
     const { productId } = useParams();
 
-    const { currentData: fetchedCategories, isLoading: loadingCategoriesQuery } = useGetCategoriesQuery(null);
-    const { currentData: fetchedProductData, isLoading: loadingProductQuery, refetch: refetchProductData } = useGetProductByIdQuery(productId!);
+    const { data: fetchedCategories, isLoading: loadingCategoriesQuery } = useGetCategoriesQuery(null);
+    const { data: fetchedProductData, isLoading: loadingProductQuery, refetch: refetchProductData } = useGetProductByIdQuery(productId!);
     const [ updateProduct, { isLoading: loadingProductMutation } ] = useUpdateProductMutation();
 
     const thumbnailButtonRef = useRef<HTMLDivElement>(null);
@@ -44,25 +44,25 @@ export function EditProduct () {
     };
 
 
-    const { currentData: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]);
+    const { data: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]);
     const [ fetchedThumbnail, setFetchedThumbnail ] = useState<IMediaRawDoc & { _id: string }>();
     useEffect(() => {
         if (!thumbnail) return;
         refetchThumbnail();
         setFormState(prevFormState => ({ ...prevFormState, thumbnail: thumbnail[0] }));
-    }, [ thumbnail ]);
+    }, [ refetchThumbnail, thumbnail ]);
     useEffect(() => {
         setFetchedThumbnail(() => fetchedThumbnailData?.data);
     }, [ fetchedThumbnailData ]);
 
 
-    const { currentData: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery);
+    const { data: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery);
     const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
     useEffect(() => {
         if (!gallery) return;
         refetchGallery();
         setFormState(prevFormState => ({ ...prevFormState, gallery }));
-    }, [ gallery ]);
+    }, [ gallery, refetchGallery ]);
     useEffect(() => {
         setFetchedGallery(() => fetchedGalleryData?.data);
     }, [ fetchedGalleryData ]);

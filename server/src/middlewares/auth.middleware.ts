@@ -21,11 +21,12 @@ export async function authenticate (req: Request, res: Response, next: NextFunct
         return next();
     } catch (error) {
     }
+    console.log(JSON.stringify(req.cookies, null, 2));
     try {
         const { refreshToken } = req.cookies;
         if (!refreshToken) throw new Error("You are not logged in, please login.");
         const { _id } = verifyRefreshToken(refreshToken);
-        const user = await UserModel.findById(_id);
+        const user = await UserModel.findById(_id, [ "-password" ]);
         if (!user) throw new Error("User not found.");
         if (!user.refreshToken) throw new Error("You are not logged in, please login again...");
         if (!(await compareHash(refreshToken, user.refreshToken))) {
@@ -38,6 +39,7 @@ export async function authenticate (req: Request, res: Response, next: NextFunct
         user.refreshToken = await hashString(newRefreshToken);
         const savedUser = await user.save();
         setAuthCookies(res, newAccessToken, newRefreshToken);
+        delete savedUser.refreshToken;
         req.user = savedUser;
         return next();
     } catch (error) {

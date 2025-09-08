@@ -10,12 +10,13 @@ import DialogHeader from "./DialogHeader.tsx";
 type Props = {
     trigger: RefObject<HTMLButtonElement | null>;
     heading: ReactNode;
-    submitAction?: () => Promise<{success: boolean, message: string}>;
+    submitAction?: () => Promise<{ success: boolean, message: string }>;
     submitLabel?: string;
     onClose?: () => void;
+    loading?: boolean;
 } & ComponentProps<"div">;
 
-export default function Dialog ({trigger, heading, submitLabel, submitAction, children, className, onClose, ...props}: Props) {
+export default function Dialog ({ trigger, heading, submitLabel, submitAction, children, className, onClose, loading = false, ...props }: Props) {
 
     const [ isOpen, setIsOpen ] = useState<boolean>(false);
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
@@ -38,7 +39,7 @@ export default function Dialog ({trigger, heading, submitLabel, submitAction, ch
         setIsLoading(true);
         try {
             if (submitAction) {
-                const {success, message} = await submitAction();
+                const { success, message } = await submitAction();
                 if (!success) throw new Error(message);
                 toast.success(message);
             }
@@ -49,6 +50,10 @@ export default function Dialog ({trigger, heading, submitLabel, submitAction, ch
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        setIsLoading(loading);
+    }, [ loading ]);
 
     useEffect(() => {
         setIsOpen(false);

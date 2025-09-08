@@ -20,7 +20,7 @@ export function Shipping () {
     const dispatch = useDispatch();
     const addressInState = useSelector((state: Store) => state.cart.address);
     const [ addNewAddress ] = useAddNewAddressMutation();
-    const { currentData: addresses, isLoading: loadingAddresses, error: addressesError, refetch: refetchAddresses } = useGetMyAddressesQuery(null);
+    const { data: addresses, isLoading: loadingAddresses, error: addressesError, refetch: refetchAddresses } = useGetMyAddressesQuery(null);
 
 
     const [ selectedAddress, setSelectedAddress ] = useState<addNewAddressReqBodyType & { _id: string } | null>(null);

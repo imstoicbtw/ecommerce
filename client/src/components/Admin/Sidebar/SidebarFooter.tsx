@@ -48,7 +48,7 @@ export default function SidebarFooter () {
                 className={"hover:bg-slate-200 flex justify-between items-center p-2 rounded-xl cursor-pointer"}
             >
                 <div className={"flex gap-2 items-center"}>
-                    <Avatar size={"large"} />
+                    <Avatar size={"large"} fallback={user?.name.firstName} src={user?.avatar} />
                     <div className="flex flex-col grow leading-5">
                         <p className={"font-semibold"}>{user!.name.firstName} {user!.name.lastName}</p>
                         <p className={"text-xs"}>{user!.email}</p>

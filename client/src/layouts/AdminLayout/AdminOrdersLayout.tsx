@@ -7,24 +7,20 @@ export default function AdminOrdersLayout () {
     const content: AdminHeaderContent = {
         navigation: [
             {
-                label: "All Orders",
-                to: "/dashboard/orders/all",
-            },
-            {
                 label: "Pending Orders",
                 to: "/dashboard/orders/pending",
             },
             {
-                label: "Completed Orders",
-                to: "/dashboard/orders/completed",
+                label: "Delivered Orders",
+                to: "/dashboard/orders/delivered",
             },
             {
                 label: "Cancelled Orders",
                 to: "/dashboard/orders/cancelled",
             },
             {
-                label: "Returned Orders",
-                to: "/dashboard/orders/returned",
+                label: "Refunded Orders",
+                to: "/dashboard/orders/refunded",
             },
         ],
     };

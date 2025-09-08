@@ -19,7 +19,40 @@ export async function getAllPayments (req: Request, res: Response) {
     const payments = await PaymentModel
         .find()
         .limit(+size)
-        .skip((+page - 1) * +size);
+        .skip((+page - 1) * +size)
+        .populate([
+            { path: "user", select: "name email" },
+        ]);
+
+    res.json({
+        success: true,
+        message: `${payments.length} payment(s) found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
+        data: payments,
+    });
+}
+
+
+/**
+ * Get payments by status.
+ * @access [admin, manager]
+ * GET /api/payments/
+ */
+export async function getPaymentsByStatus (req: Request, res: Response) {
+    const { status } = req.params;
+    const { page = 1, size = 8 } = req.query;
+    const count = await PaymentModel.countDocuments();
+    const payments = await PaymentModel
+        .find({ status })
+        .limit(+size)
+        .skip((+page - 1) * +size)
+        .populate([
+            { path: "user", select: "name email" },
+        ]);
 
     res.json({
         success: true,
@@ -41,7 +74,10 @@ export async function getAllPayments (req: Request, res: Response) {
  */
 export async function getPaymentById (req: Request, res: Response) {
     const { paymentId } = req.params;
-    const payment = await PaymentModel.findById(paymentId);
+    const payment = await PaymentModel.findById(paymentId).populate([
+        { path: "user", select: "name email avatar" },
+        { path: "order" },
+    ]);
     if (!payment) throw new Error("Payment not found.");
     else if (payment.user.toString() !== req.user.id) {
         res.status(401);

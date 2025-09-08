@@ -23,7 +23,7 @@ const userActionsMenuItems: {
     Icon: ForwardRefExoticComponent<PropsWithoutRef<SVGProps<SVGSVGElement>>>;
 }[] = [
     { label: "Profile", to: "/account/profile", Icon: UserIcon },
-    { label: "My Orders", to: "/account/orders", Icon: ArchiveBoxIcon },
+    { label: "My Orders", to: "/account/profile", Icon: ArchiveBoxIcon },
     { label: "Help", to: "/account/help", Icon: QuestionMarkCircleIcon },
 ];
 
@@ -34,7 +34,7 @@ export default function Header () {
     const user = useSelector((state: Store) => state.user.details);
 
     const navigate = useNavigate();
-    const { currentData: categories, isLoading: loadingCategories } = useGetCategoriesQuery(null);
+    const { data: categories, isLoading: loadingCategories } = useGetCategoriesQuery(null);
     const [ logout ] = useLogoutMutation();
 
     const cartCount = useSelector((state: any) => state.cart.items?.reduce((acc: number, item: CartItem) => acc + item.quantity, 0));
@@ -134,14 +134,14 @@ export default function Header () {
                                     className={"relative"}
                                     ref={userMenuTriggerRef}
                                 >
-                                    <Avatar className={"cursor-pointer"} fallback={user.name.firstName} />
+                                    <Avatar className={"cursor-pointer"} fallback={user.name.firstName} src={user.avatar} />
                                     <FloatingMenu
                                         float={"bottom-right"}
                                         trigger={userMenuTriggerRef}
                                         className={"mt-4 flex flex-col gap-1 *:flex *:gap-2 *:items-center *:p-2 *:rounded-md *:cursor-pointer"}
                                     >
                                         {userActionsMenuItems.map(({ label, to, Icon }) => (
-                                            <Link key={"admin_actions_menu_to_" + to} to={to} className={"hover:bg-blue-100 hover:text-blue-600"}>
+                                            <Link key={"user_actions_menu_to_" + to + label} to={to} className={"hover:bg-blue-100 hover:text-blue-600"}>
                                                 <Icon className={"size-5"} />
                                                 <span>{label}</span>
                                             </Link>

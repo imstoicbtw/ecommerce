@@ -138,7 +138,7 @@ export async function getInactiveProducts (req: Request, res: Response): Promise
  */
 export async function getProductById (req: Request, res: Response): Promise<void> {
     const { productId } = req.params;
-    const product: TProduct | null = await ProductModel.findById(productId).populate([ "thumbnail", "gallery", "category" ]);
+    const product: TProduct | null = await ProductModel.findById(productId).populate([ "thumbnail", "gallery", "category", { path: "reviews.user", select: "name avatar.url" } ]);
     if (!product) {
         res.status(404);
         throw new Error("Product not found.");
@@ -230,8 +230,8 @@ export async function submitReview (req: Request, res: Response): Promise<void> 
         res.status(404);
         throw new Error("Product not found.");
     }
-    const review: TProductReview = new ProductReviewModel(body);
-    product.reviews.push(review);
+    const review: TProductReview = new ProductReviewModel({ ...body, user: req.user._id });
+    product.reviews.unshift(review);
     await product.save();
     res.json({
         success: true,

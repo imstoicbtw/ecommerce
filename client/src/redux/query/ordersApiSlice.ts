@@ -1,4 +1,4 @@
-import { ORDERS_URL } from "common/dist/index.js";
+import { ORDERS_URL, orderStatuses } from "common/dist/index.js";
 import type { createOrderReqBodyType, updateOrderStatusReqBodyType } from "common/dist/zod/requests/order.zod.js";
 import { apiSlice } from "./baseQuery.ts";
 
@@ -16,6 +16,11 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
                 `${ORDERS_URL}/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
             ),
         }),
+        getOrdersByStatus: builder.query({
+            query: ({ size, page, keyword, status }: RequestQuery & { status: typeof orderStatuses[number] }) => ({
+                url: `${ORDERS_URL}/status/${status}/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`,
+            }),
+        }),
         getOrderById: builder.query({
             query: (orderId: string) => ({
                 url: `${ORDERS_URL}/${orderId}`,
@@ -29,8 +34,8 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         getMyOrders: builder.query({
-            query: ({ size, page, keyword }: RequestQuery) => (
-                `${ORDERS_URL}/current-user/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            query: () => (
+                `${ORDERS_URL}/current-user/`
             ),
         }),
         getMyOrderById: builder.query({
@@ -55,4 +60,4 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 });
 
 
-export const { useGetAllOrdersQuery, useGetOrderByIdQuery, useCreateOrderMutation, useGetMyOrdersQuery, useGetMyOrderByIdQuery, useUpdateOrderStatusMutation, useCancelOrderMutation } = ordersApiSlice;
+export const { useGetAllOrdersQuery, useGetOrderByIdQuery, useCreateOrderMutation, useGetMyOrdersQuery, useGetMyOrderByIdQuery, useUpdateOrderStatusMutation, useCancelOrderMutation, useGetOrdersByStatusQuery } = ordersApiSlice;

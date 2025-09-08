@@ -1,4 +1,4 @@
-import { PAYMENTS_URL } from "common/dist/index.js";
+import { PAYMENTS_URL, paymentStatuses } from "common/dist/index.js";
 import type { createNewPaymentReqBodyType } from "common/dist/zod/requests/payment.zod.js";
 import { apiSlice } from "./baseQuery.ts";
 
@@ -14,6 +14,11 @@ export const paymentApiSlice = apiSlice.injectEndpoints({
         getAllPayments: builder.query({
             query: ({ size, page, keyword }: RequestQuery) => (
                 `${PAYMENTS_URL}/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`
+            ),
+        }),
+        getPaymentsByStatus: builder.query({
+            query: ({ size, page, status }: RequestQuery & { status: typeof paymentStatuses[number] }) => (
+                `${PAYMENTS_URL}/status/${status}/?size=${size || 8}&page=${page || 1}`
             ),
         }),
         getPaymentById: builder.query({
@@ -32,4 +37,4 @@ export const paymentApiSlice = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useGetAllPaymentsQuery, useGetPaymentByIdQuery, useCreatePaymentMutation, useGetPaypalClientIdQuery } = paymentApiSlice;
+export const { useGetAllPaymentsQuery, useGetPaymentByIdQuery, useCreatePaymentMutation, useGetPaypalClientIdQuery, useGetPaymentsByStatusQuery } = paymentApiSlice;

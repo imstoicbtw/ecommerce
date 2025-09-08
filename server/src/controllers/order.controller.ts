@@ -21,12 +21,37 @@ export async function getAllOrders (req: Request, res: Response): Promise<void> 
         } : {};
 
     const count = await OrderModel.countDocuments({ ...searchQuery });
-    const products: TOrder[] = await OrderModel
+    const orders: TOrder[] = await OrderModel
         .find({ ...searchQuery })
         .limit(+size)
         .skip((+page - 1) * +size);
 
-    const orders: Array<TOrder> = await OrderModel.find();
+    res.json({
+        success: true,
+        message: `${orders.length} order(s) found.`,
+        meta: {
+            pageCount: Math.ceil(count / +size),
+            page: +page,
+            size: +size,
+        },
+        data: orders,
+    });
+}
+
+
+/**
+ * Get orders by status.
+ * @access [admin, manager]
+ * GET /api/orders/status/:status/
+ */
+export async function getOrdersByStatus (req: Request, res: Response): Promise<void> {
+    const { status } = req.params;
+    const { page = 1, size = 8 } = req.query;
+    const count = await OrderModel.countDocuments({ status });
+    const orders: TOrder[] = await OrderModel
+        .find({ status })
+        .limit(+size)
+        .skip((+page - 1) * +size);
     res.json({
         success: true,
         message: `${orders.length} order(s) found.`,
@@ -66,22 +91,12 @@ export async function createOrder (req: Request, res: Response): Promise<void> {
  */
 export async function getMyOrders (req: Request, res: Response): Promise<void> {
     const { user } = req;
-    const { page = 1, size = 8 } = req.query;
 
-    const count = await OrderModel.countDocuments();
-    const orders: TOrder[] = await OrderModel
-        .find({ user: user.id })
-        .limit(+size)
-        .skip((+page - 1) * +size);
+    const orders: TOrder[] = await OrderModel.find({ user: user.id });
 
     res.json({
         success: true,
         message: `${orders.length} order(s) found.`,
-        meta: {
-            pageCount: Math.ceil(count / +size),
-            page: +page,
-            size: +size,
-        },
         data: orders,
     });
 }
@@ -94,7 +109,7 @@ export async function getMyOrders (req: Request, res: Response): Promise<void> {
  */
 export async function getMyOrderById (req: Request, res: Response): Promise<void> {
     const { user, params } = req;
-    const order: TOrder | null = await OrderModel.findById(params.orderId).populate(["payment"]);
+    const order: TOrder | null = await OrderModel.findById(params.orderId).populate([ "payment" ]);
     if (!order) {
         res.status(404);
         throw new Error("Order not found.");
@@ -118,7 +133,11 @@ export async function getMyOrderById (req: Request, res: Response): Promise<void
  */
 export async function getOrderById (req: Request, res: Response): Promise<void> {
     const { orderId } = req.params;
-    const order: TOrder | null = await OrderModel.findById(orderId);
+    const order: TOrder | null = await OrderModel.findById(orderId).populate([
+        { path: "user", select: "name email avatar" },
+        { path: "payment" },
+        { path: "products.product", select: "thumbnail name", populate: { path: "thumbnail", select: "url" } },
+    ]);
     if (!order) {
         res.status(404);
         throw new Error("Order not found.");

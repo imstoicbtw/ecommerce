@@ -19,10 +19,10 @@ type Product = IProductRawDoc & {
 export function CategoryArchives () {
 
     const { categorySlug } = useParams();
-    const { currentData: fetchedCategory, isLoading: loadingCategory, error: categoryError } = useGetCategoryBySlugQuery(categorySlug || "", {
+    const { data: fetchedCategory, isLoading: loadingCategory, error: categoryError } = useGetCategoryBySlugQuery(categorySlug || "", {
         skip: !categorySlug,
     });
-    const { currentData: fetchedProducts, isLoading: loadingProducts, error: productsError } = useGetCategoryProductsBySlugQuery(categorySlug || "", {
+    const { data: fetchedProducts, isLoading: loadingProducts, error: productsError } = useGetCategoryProductsBySlugQuery(categorySlug || "", {
         skip: !categorySlug,
         refetchOnMountOrArgChange: true,
     });

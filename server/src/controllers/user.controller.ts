@@ -262,7 +262,7 @@ export async function getMyAddresses (req: Request, res: Response): Promise<void
 export async function addNewAddress (req: Request, res: Response): Promise<void> {
     const { user, body } = req;
     const address: TAddress = new AddressModel(body);
-    user.addresses.push(address);
+    user.addresses.unshift(address);
     await user.save();
     res.json({
         success: true,
@@ -278,19 +278,18 @@ export async function addNewAddress (req: Request, res: Response): Promise<void>
  */
 export async function deleteMyAddress (req: Request, res: Response): Promise<void> {
     const { user, params } = req;
-    const addressExists: TAddress | undefined = user.addresses.find((address: TAddress): boolean => address.id === params.addressId);
+    const addressExists: TAddress | undefined = user.addresses.find((address: TAddress): boolean => address._id.toString() === params.addressId);
     if (!addressExists) {
         res.status(404);
         throw new Error("Address not found!");
     }
     user.addresses = user.addresses.filter((address: TAddress): boolean => {
-        return address.id !== req.body.id;
+        return address._id.toString() !== req.params.addressId;
     });
     await user.save();
     res.json({
         success: true,
         message: "Address deleted successfully!",
-        data: user.addresses,
     });
 }
 

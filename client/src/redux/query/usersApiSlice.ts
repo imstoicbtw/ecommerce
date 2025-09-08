@@ -1,5 +1,5 @@
 import { USERS_URL } from "../../../../common/dist/index.js";
-import type { addNewAddressReqBodyType, addToCartReqBodyType, updateAddressReqBodyType, updateCartItemQuantityReqBodyType, updateCurrentUserDetailsReqBodyType, updatePasswordReqBodyType, updateUserRoleReqBodyType } from "common/dist/zod/requests/user.zod.ts";
+import type { addNewAddressReqBodyType, updateAddressReqBodyType, updateCurrentUserDetailsReqBodyType, updatePasswordReqBodyType, updateUserRoleReqBodyType } from "common/dist/zod/requests/user.zod.ts";
 import { apiSlice } from "./baseQuery.ts";
 
 
@@ -79,40 +79,19 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             query: (body: updateAddressReqBodyType & { addressId: string }) => ({
                 url: `${USERS_URL}/current-user/addresses/${body.addressId}`,
                 method: "PUT",
+                body
             }),
         }),
-        getCart: builder.query({
-            query: () => ({
-                url: `${USERS_URL}/current-user/cart`,
-            }),
-        }),
-        addToCart: builder.mutation({
-            query: (productId: addToCartReqBodyType) => ({
-                url: `${USERS_URL}/current-user/cart`,
-                method: "POST",
-                body: { productId },
-            }),
-        }),
-        updateCartItemQuantity: builder.mutation({
-            query: (body: updateCartItemQuantityReqBodyType & { cartItemId: string }) => ({
-                url: `${USERS_URL}/current-user/cart/${body.cartItemId}`,
-                method: "PUT",
-                body,
-            }),
-        }),
-        removeFromCart: builder.mutation({
-            query: (cartItemId: string) => ({
-                url: `${USERS_URL}/current-user/cart/${cartItemId}`,
-            }),
-        }),
-        clearCart: builder.mutation({
-            query: () => ({
-                url: `${USERS_URL}/current-user/cart`,
-                method: "DELETE",
+        uploadAvatar: builder.mutation({
+            query: (formData: FormData) => ({
+                url: `${USERS_URL}/current-user/avatar`,
+                method: "PATCH",
+                body: formData,
+                formData: true,
             }),
         }),
     }),
 });
 
 
-export const { useGetCustomersQuery, useGetUserByIdQuery, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation, useGetCurrentUserQuery, useUpdateCurrentUserDetailsMutation, useUpdatePasswordMutation, useGetMyAddressesQuery, useAddNewAddressMutation, useDeleteMyAddressMutation, useUpdateMyAddressMutation, useGetCartQuery, useAddToCartMutation, useUpdateCartItemQuantityMutation, useRemoveFromCartMutation, useClearCartMutation } = usersApiSlice;
+export const { useGetCustomersQuery, useGetUserByIdQuery, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation, useGetCurrentUserQuery, useUpdateCurrentUserDetailsMutation, useUpdatePasswordMutation, useGetMyAddressesQuery, useAddNewAddressMutation, useDeleteMyAddressMutation, useUpdateMyAddressMutation, useUploadAvatarMutation } = usersApiSlice;
