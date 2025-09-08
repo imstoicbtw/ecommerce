@@ -11,10 +11,10 @@ import { AllCategories } from "../screens/admin/AdminCategories";
 import { AllCustomers, InactiveCustomers } from "../screens/admin/AdminCustomers";
 import { AllDisputes, ClosedDisputes, OpenDisputes } from "../screens/admin/AdminDisputes/";
 import { AllMedia } from "../screens/admin/AdminMedia";
-import { AllOrders, CancelledOrders, DeliveredOrders, PendingOrders, RefundedOrders } from "../screens/admin/AdminOrders";
+import { AllOrders, CancelledOrders, DeliveredOrders, ReadyToShipOrders, RefundedOrders } from "../screens/admin/AdminOrders";
 import { OrderView } from "../screens/admin/AdminOrders/OrderView.tsx";
 import { AllProducts, EditProduct, InactiveProducts, NewProduct, OnSaleProducts } from "../screens/admin/AdminProducts";
-import AdminHome from "../screens/AdminHome.tsx";
+import AdminHome from "../screens/admin/AdminHome.tsx";
 import { AllPayments, FailedPayments, SuccessfulPayments } from "../screens/admin/AdminPayments";
 
 
@@ -36,7 +36,7 @@ export const AdminRouter: RouteObject = {
                 },
                 {
                     path: "pending",
-                    Component: PendingOrders,
+                    Component: ReadyToShipOrders,
                 },
                 {
                     path: "delivered",

@@ -22,18 +22,10 @@ const content: AdminHeaderContent = {
 };
 
 export default function AdminProductsLayout () {
-
-    const handleSearch = (): void => {
-        console.log("Search");
-    };
-
     return (
         <div className={"grid gap-5"}>
             <AdminHeader
                 headerContent={content}
-                searchHandler={handleSearch}
-                searchLabel={"Search Product"}
-                searchPlaceholder={"Search product by product id or name."}
             />
             <Outlet />
         </div>

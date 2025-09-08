@@ -67,5 +67,10 @@ productSchema.virtual("amountSaved")
                  return this.price - this.salePrice;
              });
 
+productSchema.pre("find", function (next) {
+    this.sort("-createdAt");
+    next();
+});
+
 
 export const ProductModel: TProductModel = model<IProductRawDoc, TProductModel, IProductMethods>("Product", productSchema);

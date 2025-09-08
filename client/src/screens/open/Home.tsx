@@ -28,7 +28,7 @@ export function Home () {
                         Happy Diwali
                     </h2>
                     <h3 className={"text-4xl font-bold"}>Sale is now live!</h3>
-                    <Button to={"/shop"} size={"large"} icon={PercentBadgeIcon} variant={"success"} className={"mt-4"}>Shop Now &rarr;</Button>
+                    <Button to={"/sale"} size={"large"} icon={PercentBadgeIcon} variant={"success"} className={"mt-4"}>Shop Now &rarr;</Button>
                 </div>
             </section>
             <section className={"inner mt-30"}>
@@ -73,7 +73,7 @@ export function Home () {
                 {!recentlyViewedProducts.length
                     ? <div className={"max-w-max flex flex-col items-center gap-2 m-auto"}>
                         <p>You haven't browsed any products.</p>
-                        <Button to={"/shop"}>Browse products &rarr;</Button>
+                        <Button to={"/sale"}>Browse products &rarr;</Button>
                     </div>
                     : <ul className={"grid grid-cols-4 gap-5"}>
                         {recentlyViewedProducts

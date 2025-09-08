@@ -1,5 +1,5 @@
 import { ChevronUpIcon } from "@heroicons/react/16/solid/index";
-import { ArrowLeftStartOnRectangleIcon, Cog6ToothIcon, QuestionMarkCircleIcon, UserIcon } from "@heroicons/react/24/outline/index";
+import { ArrowLeftStartOnRectangleIcon, QuestionMarkCircleIcon, UserIcon } from "@heroicons/react/24/outline/index";
 import { type ForwardRefExoticComponent, type PropsWithoutRef, type SVGProps, useRef } from "react";
 import { Link, type To, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify/unstyled";
@@ -22,8 +22,7 @@ export default function SidebarFooter () {
         Icon: ForwardRefExoticComponent<PropsWithoutRef<SVGProps<SVGSVGElement>>>;
     }[] = [
         { label: "Profile", to: "/account/profile", Icon: UserIcon },
-        { label: "Settings", to: "/account/settings", Icon: Cog6ToothIcon },
-        { label: "Help", to: "/account/help", Icon: QuestionMarkCircleIcon },
+        { label: "Help", to: "/contact", Icon: QuestionMarkCircleIcon },
     ];
 
     const navigate = useNavigate();

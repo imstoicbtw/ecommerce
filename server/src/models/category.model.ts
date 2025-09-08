@@ -14,5 +14,10 @@ const categorySchema: Schema = new Schema<ICategoryRawDoc, TCategoryModel, ICate
     },
 }, { timestamps: true });
 
+categorySchema.pre("find", function (next) {
+    this.sort("-createdAt");
+    next();
+});
+
 
 export const CategoryModel: TCategoryModel = model<ICategoryRawDoc, TCategoryModel, ICategoryMethods>("Category", categorySchema);

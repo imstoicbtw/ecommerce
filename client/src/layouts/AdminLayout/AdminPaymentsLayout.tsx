@@ -5,8 +5,8 @@ import AdminHeader, { type AdminHeaderContent } from "../../components/Admin/Adm
 
 const content: AdminHeaderContent = {
     action: {
-        label: "Razorpay",
-        to: "https://dashboard.razorpay.com/",
+        label: "Paypal",
+        to: "https://business.paypal.com/",
         icon: ArrowTopRightOnSquareIcon,
         target: "_blank",
     },
@@ -23,18 +23,10 @@ const content: AdminHeaderContent = {
 };
 
 export default function AdminPaymentsLayout () {
-
-    const handleSearch = (): void => {
-        console.log("Search");
-    };
-
     return (
         <div className={"grid gap-5"}>
             <AdminHeader
                 headerContent={content}
-                searchHandler={handleSearch}
-                searchLabel={"Search Payment"}
-                searchPlaceholder={"Search payment by order id."}
             />
             <Outlet />
         </div>

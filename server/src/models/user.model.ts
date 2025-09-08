@@ -67,4 +67,9 @@ userSchema.pre("save", async function (this: TUser, next: Function): Promise<voi
     this.password = await bcrypt.hash(this.password, salt);
 });
 
+userSchema.pre("find", function (next) {
+    this.sort("-createdAt");
+    next();
+});
+
 export const UserModel: TUserModel = model<IUserRawDoc, TUserModel>("User", userSchema);

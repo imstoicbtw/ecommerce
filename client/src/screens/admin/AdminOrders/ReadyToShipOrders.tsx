@@ -10,12 +10,12 @@ import { useLocation } from "react-router-dom";
 
 type Order = IOrderRawDoc & { _id: string };
 
-export function PendingOrders () {
+export function ReadyToShipOrders () {
 
     const { search } = useLocation();
     const params = getRequestMeta(search);
     const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
-    const { data: orders, isLoading: loadingOrders, error: ordersError, refetch: refetchOrders } = useGetOrdersByStatusQuery({ ...params, size: pageSize, status: "pending" }, { refetchOnMountOrArgChange: true });
+    const { data: orders, isLoading: loadingOrders, error: ordersError, refetch: refetchOrders } = useGetOrdersByStatusQuery({ ...params, size: pageSize, status: "processing" }, { refetchOnMountOrArgChange: true });
 
 
     useEffect(() => {
@@ -27,9 +27,9 @@ export function PendingOrders () {
 
     return (
         <main>
-            <h2 className={"text-xl font-bold mb-4"}>Pending Orders</h2>
+            <h2 className={"text-xl font-bold mb-4"}>Ready To Ship Orders</h2>
             {!orders?.data?.length
-                ? <p>No pending orders found.</p>
+                ? <p>No orders are ready to ship.</p>
                 : <>
                     <OrdersTable receivedOrders={orders.data as Order[]} />
                     <Pagination meta={orders.meta} baseUrl={"/dashboard/orders/pending"} pageSize={pageSize} setPageSize={setPageSize} />

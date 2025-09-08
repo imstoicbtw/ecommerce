@@ -34,5 +34,10 @@ export const mediaSchema: Schema = new Schema<IMediaRawDoc, TMediaModel, IMediaM
     },
 }, { timestamps: true });
 
+mediaSchema.pre("find", function (next) {
+    this.sort("-createdAt");
+    next();
+});
+
 
 export const MediaModel: TMediaModel = model<IMediaRawDoc, TMediaModel, IMediaMethods>("Media", mediaSchema);

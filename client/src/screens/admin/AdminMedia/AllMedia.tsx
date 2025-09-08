@@ -38,7 +38,7 @@ export function AllMedia () {
         <main>
             <h2 className={"text-xl font-bold"}>All Media</h2>
             <p className={"italic text-red-500 mb-4"}>Any media items deleted from here will be then removed from everywhere.</p>
-            <ul className={"grid grid-cols-4 gap-4"}>
+            <ul className={"grid grid-cols-4 gap-4 mb-8"}>
                 {
                     [ ...media.data ].reverse().map((media: IMediaRawDoc & { _id: string }) => (
                         <li

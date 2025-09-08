@@ -47,5 +47,10 @@ const paymentSchema: Schema = new Schema<IPaymentRawDoc, TPaymentModel, IPayment
     },
 }, { timestamps: true });
 
+paymentSchema.pre("find", function (next) {
+    this.sort("-createdAt");
+    next();
+});
+
 
 export const PaymentModel: TPaymentModel = model<IPaymentRawDoc, TPaymentModel, IPaymentMethods>("Payment", paymentSchema);

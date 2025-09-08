@@ -24,7 +24,7 @@ const userActionsMenuItems: {
 }[] = [
     { label: "Profile", to: "/account/profile", Icon: UserIcon },
     { label: "My Orders", to: "/account/profile", Icon: ArchiveBoxIcon },
-    { label: "Help", to: "/account/help", Icon: QuestionMarkCircleIcon },
+    { label: "Help", to: "/contact", Icon: QuestionMarkCircleIcon },
 ];
 
 

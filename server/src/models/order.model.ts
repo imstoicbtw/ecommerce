@@ -52,5 +52,10 @@ const orderSchema: Schema = new Schema<IOrderRawDoc, TOrderModel, IOrderMethods,
     },
 }, { timestamps: true });
 
+orderSchema.pre("find", function (next) {
+    this.sort("-createdAt");
+    next();
+});
+
 
 export const OrderModel: TOrderModel = model<IOrderRawDoc, TOrderModel, IOrderMethods>("Order", orderSchema);

@@ -11,6 +11,9 @@ type RequestQuery = {
 
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        getAdminStats: builder.query({
+            query: () => `${USERS_URL}/admin`,
+        }),
         getCustomers: builder.query({
             query: ({ size, page, keyword }: RequestQuery) => ({
                 url: `${USERS_URL}/customers/?size=${size || 8}&page=${page || 1}&keyword=${keyword || ""}`,
@@ -79,7 +82,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             query: (body: updateAddressReqBodyType & { addressId: string }) => ({
                 url: `${USERS_URL}/current-user/addresses/${body.addressId}`,
                 method: "PUT",
-                body
+                body,
             }),
         }),
         uploadAvatar: builder.mutation({
@@ -94,4 +97,4 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 });
 
 
-export const { useGetCustomersQuery, useGetUserByIdQuery, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation, useGetCurrentUserQuery, useUpdateCurrentUserDetailsMutation, useUpdatePasswordMutation, useGetMyAddressesQuery, useAddNewAddressMutation, useDeleteMyAddressMutation, useUpdateMyAddressMutation, useUploadAvatarMutation } = usersApiSlice;
+export const { useGetCustomersQuery, useGetUserByIdQuery, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useDeleteUserMutation, useGetCurrentUserQuery, useUpdateCurrentUserDetailsMutation, useUpdatePasswordMutation, useGetMyAddressesQuery, useAddNewAddressMutation, useDeleteMyAddressMutation, useUpdateMyAddressMutation, useUploadAvatarMutation, useGetAdminStatsQuery } = usersApiSlice;

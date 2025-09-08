@@ -51,9 +51,6 @@ export default function AdminMediaLayout () {
         <div className={"grid gap-5"}>
             <AdminHeader
                 headerContent={content}
-                searchHandler={() => console.log("Search")}
-                searchPlaceholder={"Search for media items by file name"}
-                searchLabel={"Search Media"}
             />
             <Outlet />
             <Dialog

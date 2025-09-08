@@ -3,13 +3,38 @@ import { Request, Response } from "express";
 import { DeleteResult } from "mongoose";
 import { userRoles } from "../../../common/dist/constants.js";
 import { updatePasswordReqBodyType } from "../../../common/dist/zod/requests/user.zod.js";
+import { OrderModel } from "../models/order.model.js";
+import { PaymentModel } from "../models/payment.model.js";
 import AddressModel from "../models/subdocs/address.model.js";
 import { CartItemModel } from "../models/subdocs/cart-item.model.js";
 import { UserModel } from "../models/user.model.js";
 import { destroyFromCloudinary } from "../utils/cloudinary.util.js";
 
 
-// ~ ADMIN ROUTES 
+// ~ ADMIN ROUTES
+
+/**
+ * Get admin stats.
+ * @access [admin, manager]
+ * GET /api/users/admin
+ */
+export async function getAdminStats (req: Request, res: Response) {
+    const data = {
+        "New Orders": await OrderModel.countDocuments({ status: "processing" }),
+        "Customers": await UserModel.countDocuments({ role: "customer" }),
+        "Total Sales": "₹" + Math.round((await PaymentModel.aggregate([
+            { $match: { status: "completed" } },
+            { $group: { _id: null, total: { $sum: "$amount" } } },
+        ]))[0].total),
+        "Open Disputes": 0,
+    };
+
+    res.json({
+        success: true,
+        data,
+    });
+}
+
 
 /**
  * Get all customers.

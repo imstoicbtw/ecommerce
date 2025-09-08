@@ -5,7 +5,7 @@ import {
     addToCart,
     clearCart,
     deleteMyAddress,
-    deleteUser,
+    deleteUser, getAdminStats,
     getCart,
     getCurrentUser,
     getCustomers,
@@ -81,6 +81,13 @@ userRouter.route("/current-user/cart/:cartItemId")
 
 
 // ~ ADMIN ROUTES 
+
+userRouter.route("/admin")
+          .get(
+              authenticate,
+              authorize(userRoles.Admin, userRoles.Manager),
+              getAdminStats,
+          );
 
 userRouter.route("/customers")
           .get(

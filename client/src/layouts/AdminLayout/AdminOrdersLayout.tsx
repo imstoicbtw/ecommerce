@@ -1,3 +1,4 @@
+import { CheckCircleIcon } from "@heroicons/react/24/solid/index";
 import { Outlet } from "react-router-dom";
 import AdminHeader, { type AdminHeaderContent } from "../../components/Admin/AdminHeader";
 
@@ -5,11 +6,12 @@ import AdminHeader, { type AdminHeaderContent } from "../../components/Admin/Adm
 export default function AdminOrdersLayout () {
 
     const content: AdminHeaderContent = {
+        action: {
+            label: "Ready to Ship",
+            to: "/dashboard/orders/pending",
+            icon: CheckCircleIcon,
+        },
         navigation: [
-            {
-                label: "Pending Orders",
-                to: "/dashboard/orders/pending",
-            },
             {
                 label: "Delivered Orders",
                 to: "/dashboard/orders/delivered",
@@ -25,17 +27,10 @@ export default function AdminOrdersLayout () {
         ],
     };
 
-    const handleSearch = (): void => {
-        console.log("Search");
-    };
-
     return (
         <div className={"grid gap-5"}>
             <AdminHeader
                 headerContent={content}
-                searchHandler={handleSearch}
-                searchLabel={"Search Order"}
-                searchPlaceholder={"Search order by order id, phone number, or pin code."}
             />
             <Outlet />
         </div>

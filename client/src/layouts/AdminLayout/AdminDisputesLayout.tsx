@@ -16,18 +16,10 @@ const content: AdminHeaderContent = {
 };
 
 export default function AdminDisputesLayout () {
-
-    const handleSearch = (): void => {
-        console.log("Search");
-    };
-
     return (
         <div className={"grid gap-5"}>
             <AdminHeader
                 headerContent={content}
-                searchHandler={handleSearch}
-                searchLabel={"Search Dispute"}
-                searchPlaceholder={"Search dispute by ticket id or customer name."}
             />
             <Outlet />
         </div>
