@@ -36,7 +36,7 @@ export function Search () {
             </section>
             <section className={"inner my-10"}>
                 {!products.data.length && <p>No products found.</p>}
-                <ul className={"grid grid-cols-4 gap-5"}>
+                <ul className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-5"}>
                     {
                         products.data.map((product: Product) => (
                             <ProductCard product={product} key={"search_result_" + product._id} />

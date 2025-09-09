@@ -1,7 +1,8 @@
 import { MinusIcon, PlusIcon, SparklesIcon } from "@heroicons/react/16/solid/index";
+import { HomeIcon } from "@heroicons/react/20/solid/index";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline/index";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid/index";
-import { ChevronRightIcon, HomeIcon, PercentBadgeIcon, ShoppingBagIcon, Squares2X2Icon } from "@heroicons/react/24/solid/index";
+import { ChevronRightIcon, PercentBadgeIcon, ShoppingBagIcon, Squares2X2Icon } from "@heroicons/react/24/solid/index";
 import type { IMediaRawDoc } from "common/dist/mongoose/media.types.ts";
 import type { IProductRawDoc, IProductReviewRawDoc } from "common/dist/mongoose/product.types.ts";
 import type { INameRawDoc } from "common/dist/mongoose/user.types.ts";
@@ -120,8 +121,8 @@ export function ProductPage () {
     console.log(fetchedProduct);
     return (
         <main className={"py-12"}>
-            <section className={"inner grid grid-cols-2 gap-10 text-slate-700"}>
-                <div className={"sticky top-0"}>
+            <section className={"inner grid lg:grid-cols-2 gap-10 text-slate-700"}>
+                <div className={"lg:sticky top-0"}>
                     <Gallery
                         gallery={[
                             thumbnail,
@@ -130,56 +131,56 @@ export function ProductPage () {
                     />
                 </div>
                 <div>
-                    <nav className={"flex items-center gap-2 text-sm font-medium"}>
-                        <Link to={"/"}><HomeIcon className={"size-5 -mt-1 hover:text-blue-600"} /></Link>
+                    <nav className={"flex items-center gap-x-2 text-sm font-medium flex-wrap"}>
+                        <Link to={"/"}><HomeIcon className={"size-4 sm:size-5 -mt-0.5 hover:text-blue-600"} /></Link>
                         <ChevronRightIcon className={"size-3"} />
                         <Link to={`/product-category/${category.slug}`} className={"link"}>{category.name}</Link>
                         <ChevronRightIcon className={"size-3"} />
                         <span className={"text-slate-600"}>{name}</span>
                     </nav>
-                    <div className={"mt-5 flex items-center gap-2"}>
-                        <Link to={`/product-category/${category.slug}`} className={"text-sm uppercase px-2 py-1 rounded-full bg-blue-100 border-2 border-blue-200 text-blue-600 font-semibold hover:bg-blue-200 hover:text-blue-700 inline-flex items-center gap-1"}>
+                    <div className={"mt-5 flex items-center gap-2 flex-wrap"}>
+                        <Link to={`/product-category/${category.slug}`} className={"text-xs sm:text-sm uppercase px-2 py-1 rounded-full bg-blue-100 border-2 border-blue-200 text-blue-600 font-semibold hover:bg-blue-200 hover:text-blue-700 inline-flex items-center gap-1"}>
                             <Squares2X2Icon className={"size-3"} />
                             <span>{category.name}</span>
                         </Link>
                         {onSale && (
-                            <div className={"text-sm uppercase px-2 py-1 rounded-full bg-green-100 border-2 border-green-200 text-green-600 font-semibold inline-flex items-center gap-1"}>
+                            <div className={"text-xs sm:text-sm uppercase px-2 py-1 rounded-full bg-green-100 border-2 border-green-200 text-green-600 font-semibold inline-flex items-center gap-1"}>
                                 <PercentBadgeIcon className={"size-4"} />
                                 <span>On sale</span>
                             </div>
                         )}
                     </div>
                     <div className={"mt-5"}>
-                        <h1 className={"text-3xl font-bold"}>{name}</h1>
+                        <h1 className={"text-xl sm:text-3xl font-bold"}>{name}</h1>
                     </div>
                     <div className={"mt-3"}>
                         <Rating reviews={reviews} expanded />
                     </div>
                     <div className={"mt-5"}>
                         {!onSale
-                            ? <p className={"text-5xl font-bold"}>
-                                <span className={"font-light text-4xl mr-1"}>₹</span>
+                            ? <p className={"text-3xl sm:text-5xl font-bold"}>
+                                <span className={"font-light text-2xl sm:text-4xl mr-1"}>₹</span>
                                 <span>{price}</span>
-                                <span className={"font-light text-4xl"}>/-</span>
+                                <span className={"font-light text-2xl sm:text-4xl"}>/-</span>
                             </p>
                             : <div>
                                 <p>
-                                <span className={"text-green-600 text-5xl font-bold mr-3"}>
-                                    <span className={"font-light text-4xl mr-1"}>₹</span>
+                                <span className={"text-green-600 text-3xl sm:text-5xl font-bold mr-3"}>
+                                    <span className={"font-light text-2xl sm:text-4xl mr-1"}>₹</span>
                                     <span>{salePrice}</span>
-                                    <span className={"font-light text-4xl"}>/-</span>
+                                    <span className={"font-light text-2xl sm:text-4xl"}>/-</span>
                                 </span>
-                                    <span className={"text-slate-500 text-4xl font-bold"}>
-                                    <span className={"font-light text-3xl"}>₹</span>
+                                    <span className={"text-slate-500 text-2xl sm:text-4xl  font-bold"}>
+                                    <span className={"font-light text-xl sm:text-3xl"}>₹</span>
                                     <span className={"line-through"}>{price}</span>
-                                    <span className={"font-light text-3xl"}>/-</span>
+                                    <span className={"font-light text-xl sm:text-3xl"}>/-</span>
                                 </span>
                                 </p>
                                 <p className={"mt-2"}>
-                                    <span className={"py-1 px-2 rounded-full bg-blue-500 text-white font-bold"}>
+                                    <span className={"py-1 px-2 text-sm sm:text-base rounded-full bg-blue-500 text-white font-bold"}>
                                         {Math.round((salePrice! / price) * 100)}%
                                     </span>
-                                    <span className={"font-medium text-blue-500 ml-2"}>You would save ₹{price - salePrice!} on this product.</span>
+                                    <span className={"font-medium text-sm sm:text-base text-blue-500 ml-2"}>You would save ₹{price - salePrice!} on this product.</span>
                                 </p>
                             </div>
                         }
@@ -218,7 +219,7 @@ export function ProductPage () {
                     </div>
                 </div>
             </section>
-            <section className={"inner mt-16 grid grid-cols-2 gap-10"}>
+            <section className={"inner mt-16 grid md:grid-cols-2 gap-10"}>
                 <div>
                     <h2 className={"text-2xl font-bold"}>Your Rating</h2>
                     {!userId
@@ -288,7 +289,7 @@ export function ProductPage () {
             </section>
             {!!relatedProducts?.length && <section className={"inner mt-16"}>
                 <h2 className={"text-2xl font-bold"}>Related Products</h2>
-                <ul className={"grid grid-cols-4 gap-5 mt-5"}>
+                <ul className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-5 mt-5"}>
                     {relatedProducts.map((product: Product) => (
                         <ProductCard product={product} key={"related_" + product._id} />
                     ))}

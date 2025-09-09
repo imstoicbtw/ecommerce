@@ -35,9 +35,9 @@ export function Sale () {
     return (
         <main className={"my-12"}>
             <section className={"inner"}>
-                <div className={"bg-green-50 h-60 rounded-3xl flex justify-center items-center flex-col gap-2"}>
+                <div className={"bg-green-50 h-60 rounded-2xl md:rounded-3xl flex justify-center items-center flex-col gap-2"}>
                     <h2 className={"font-semibold text-green-600"}>Products On Sale</h2>
-                    <h1 className={"text-4xl font-bold"}>Shop & Save</h1>
+                    <h1 className={"text-2xl md:text-4xl font-bold"}>Shop & Save</h1>
                     <div className={"flex items-center gap-1"}>
                         <Link to={"/"} className={"text-blue-500 hover:text-blue-600 block hover:bg-blue-100 p-1 rounded-full -mt-0.5"}><HomeIcon className={"size-5"} /></Link>
                         <ChevronRightIcon className={"size-4"} />
@@ -46,7 +46,7 @@ export function Sale () {
                 </div>
             </section>
             <section className={"inner mt-12"}>
-                <ul className={"grid grid-cols-4 gap-5"}>
+                <ul className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-5"}>
                     {products?.map((product: Product) => (
                         <ProductCard product={product} key={product._id} />
                     ))}

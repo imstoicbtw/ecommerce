@@ -42,9 +42,9 @@ export default function Rating ({ reviews, expanded = false, single }: Props) {
         <div className={"max-w-max"}>
             <div className={`flex items-center ${expanded && "gap-0.5"}`}>
                 {getStars(single ?? getRating()).map((Icon, index) => (
-                    <span className={`text-yellow-600 ${expanded ? "size-7" : "size-4"}`} key={"rating_star_con" + index}>{Icon}</span>
+                    <span className={`text-yellow-600 ${expanded ? "size-5 md:size-7" : "size-3 md:size-4"}`} key={"rating_star_con" + index}>{Icon}</span>
                 ))}
-                {!single && getRating() > 0 && <span className={`ml-1 leading-0 ${expanded ? "text-lg" : "text-sm"}`}>({reviews.length})</span>}
+                {!single && getRating() > 0 && <span className={`ml-1 leading-0 mt-0.5 ${expanded ? "md:text-lg" : "text-[10px] md:text-sm"}`}>({reviews.length})</span>}
             </div>
             {!single && expanded && !reviews.length && (<div className={"italic text-center"}>No reviews yet.</div>)}
         </div>

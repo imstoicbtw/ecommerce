@@ -25,7 +25,7 @@ export default function Pagination ({ baseUrl, meta, setPageSize, keyword }: Pro
                     className={"bg-blue-500 size-7 rounded-md text-white"}
                     hidden={meta.page === 1}
                 >&larr;</Button>
-                <p className={"text-sm"}>Page {meta.page} of {meta.pageCount}</p>
+                <p className={"text-sm leading-tight text-center"}>Page {meta.page} of {meta.pageCount}</p>
                 <Button
                     to={`${baseUrl}/?page=${meta.page + 1 || 1}&size=${meta.size}${keyword ? `&keyword=${keyword}` : ""}`}
                     className={"bg-blue-500 size-7 rounded-md text-white"}
@@ -33,7 +33,7 @@ export default function Pagination ({ baseUrl, meta, setPageSize, keyword }: Pro
                 >&rarr;</Button>
             </div>
             <div className={"flex gap-3 justify-center items-center"}>
-                <label htmlFor={"pageSize"}>Items per page:</label>
+                <label htmlFor={"pageSize"} className={"text-sm sm:text-base text-right leading-tight"}>Items per page:</label>
                 <select
                     name={"pageSize"}
                     id={"pageSize"}

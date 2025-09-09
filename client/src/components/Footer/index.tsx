@@ -15,7 +15,7 @@ export default function Footer () {
     return (
         <footer className={"bg-blue-50"}>
             <section className={"inner py-10"}>
-                <div className={"grid grid-cols-4"}>
+                <div className={"grid gap-8 sm:gap-0 sm:grid-cols-4"}>
                     <nav className={"col-span-1"}>
                         <ul className={"flex flex-col gap-2"}>
                             {Object.entries(footerMenu).map(([ label, to ]) => (
@@ -25,18 +25,18 @@ export default function Footer () {
                             ))}
                         </ul>
                     </nav>
-                    <div className={"col-span-3 flex flex-col justify-center items-end gap-2"}>
+                    <div className={"col-span-3 flex flex-col justify-center items-start sm:items-end gap-2"}>
                         <h1 className={"flex gap-1 items-center text-2xl font-black justify-center leading-0 text-blue-500"}>
                             <ClockIcon className={"size-6 -mt-px"} />
                             <span>SHOPHOUR</span>
                         </h1>
-                        <address className={"text-right text-slate-700"}>
+                        <address className={"sm:text-right text-slate-700"}>
                             <p>
                                 Flat No. 302, Sunrise Apartments, Linking Road, Bandra West,
                                 <br />
                                 Mumbai, Maharashtra 400050, India.
                             </p>
-                            <p className={"flex gap-1 items-center justify-end text-blue-600"}>
+                            <p className={"flex gap-1 items-center sm:justify-end text-blue-600"}>
                                 <EnvelopeIcon className={"size-4"} />
                                 <a href={"mailto:contact@shophour.in"} className={"link"}>contact@shophour.in</a>
                             </p>
