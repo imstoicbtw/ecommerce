@@ -175,7 +175,7 @@ export function NewProduct () {
                 </SelectInput>
 
                 <div className={"grid grid-cols-4 gap-6"}>
-                    <div className={"flex flex-col"}>
+                    <div className={"flex flex-col col-span-4 sm:col-span-3 md:col-span-1"}>
                         <h2 className={"font-semibold text-lg mb-2"}>Thumbnail</h2>
                         <div
                             ref={thumbnailButtonRef}
@@ -196,18 +196,18 @@ export function NewProduct () {
 
                         </div>
                     </div>
-                    <div className={"col-span-3 flex flex-col"}>
+                    <div className={"col-span-4 md:col-span-3 flex flex-col"}>
                         <div className={"flex justify-between items-center mb-2"}>
                             <h2 className={"font-semibold text-lg"}>Gallery</h2>
                             <Button type={"button"} size={"small"} icon={PlusIcon} ref={galleryButtonRef}>Add Images</Button>
                         </div>
-                        <div className={"bg-slate-50 grow rounded-2xl p-3"}>
+                        <div className={"grow rounded-2xl"}>
                             {!fetchedGallery?.length ? (
                                 <div className={"flex flex-col gap-2 items-center p-5"}>
                                     <PhotoIcon className={"w-12 h-12"} />
                                     <span>No images selected</span>
                                 </div>) : (
-                                <div className={"grid grid-cols-6 gap-2"}>
+                                <div className={"grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"}>
                                     {
                                         fetchedGallery.map((image) => (
                                             <div

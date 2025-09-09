@@ -27,7 +27,7 @@ export function OnSaleProducts () {
     if (productsError) return <div className={"text-red-500 italic"}>Error: Something went wrong, please try reloading the page.</div>;
 
     return (
-        <main>
+        <main className={"overflow-hidden"}>
             <h2 className={"text-xl font-bold mb-4"}>Products On Sale</h2>
             <ProductsTable products={products.data as Product[]} />
             <Pagination baseUrl={"/dashboard/products/on-sale"} meta={products.meta} setPageSize={setPageSize} pageSize={pageSize} />

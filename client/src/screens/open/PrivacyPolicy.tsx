@@ -2,9 +2,9 @@ export function PrivacyPolicy () {
     return (
         <main>
             <section className={"inner mt-12"}>
-                <h1 className={"text-lg font-medium"}>Shophour</h1>
+                <h1 className={"text-lg font-medium"}>Aplamart</h1>
                 <h2 className={"text-2xl font-bold"}>Privacy Policy</h2>
-                <p className={"mt-2"}>At Shophour, your privacy and trust are very important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our website or services.</p>
+                <p className={"mt-2"}>At Aplamart, your privacy and trust are very important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our website or services.</p>
             </section>
             <section className={"inner mt-6"}>
                 <h2 className={"text-xl font-semibold"}>📌 Information We Collect</h2>
@@ -28,7 +28,7 @@ export function PrivacyPolicy () {
                 <ol className={"list-decimal mt-2"}>
                     <li>We do not sell or rent your personal information to third parties.</li>
                     <li>We may share data with trusted service providers (e.g., payment processors, delivery partners) only to complete your orders.</li>
-                    <li>We may disclose information if required by law or to protect Shophour’s rights and safety.</li>
+                    <li>We may disclose information if required by law or to protect Aplamart’s rights and safety.</li>
                 </ol>
             </section>
             <section className={"inner mt-6"}>

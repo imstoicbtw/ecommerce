@@ -60,10 +60,10 @@ export default function MediaSelector ({ trigger, mediaState, setMediaState, lim
 
     return (
         <div className={"h-screen w-screen grid place-items-center fixed inset-0 z-[9997] before:absolute before:inset-0 before:bg-slate-900 before:opacity-50"}>
-            <div className={"z-[9998] flex flex-col gap-5 w-4/5 max-h-max p-5 rounded-2xl bg-white"}>
+            <div className={"z-[9998] flex flex-col gap-5 w-11/12 lg:w-4/5 max-h-max p-5 rounded-2xl bg-white"}>
                 <h2 className={"text-xl font-semibold border-b-2 border-b-slate-300 pb-3"}>Select Media</h2>
                 <div className="flex-grow h-[500px] max-h-[60vh] overflow-y-auto">
-                    <div className={"grid grid-cols-6 gap-2"}>
+                    <div className={"grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"}>
                         {
                             [ ...media.data ].reverse().map(({ _id: id, url, name }: IMediaRawDoc & { _id: string; }) => (
                                 <div

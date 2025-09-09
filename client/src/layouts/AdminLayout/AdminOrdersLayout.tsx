@@ -29,9 +29,7 @@ export default function AdminOrdersLayout () {
 
     return (
         <div className={"grid gap-5"}>
-            <AdminHeader
-                headerContent={content}
-            />
+            <AdminHeader headerContent={content} />
             <Outlet />
         </div>
     );

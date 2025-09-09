@@ -28,7 +28,7 @@ export function InactiveProducts () {
     if (products.data && !products.data.length) return <main>No inactive products found.</main>;
 
     return (
-        <main>
+        <main className={"overflow-hidden"}>
             <h2 className={"text-xl font-bold mb-4"}>Inactive Products</h2>
             <ProductsTable products={products.data as Product[]} />
             <Pagination meta={products.meta} baseUrl={"/dashboard/products/inactive"} pageSize={pageSize} setPageSize={setPageSize} />

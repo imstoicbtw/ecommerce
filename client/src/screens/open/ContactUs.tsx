@@ -20,7 +20,7 @@ export function ContactUs () {
                         </p>
                         <p className={"flex gap-1 items-center text-blue-600"}>
                             <EnvelopeIcon className={"size-4"} />
-                            <a href={"mailto:contact@shophour.in"} className={"link"}>contact@shophour.in</a>
+                            <a href={"mailto:contact@aplamart.in"} className={"link"}>contact@aplamart.in</a>
                         </p>
                     </address>
                 </div>

@@ -14,7 +14,7 @@ export default function AdminLayout () {
     return (
         <div className={"flex"}>
             <Sidebar />
-            <div className={"flex-1 p-6"}>
+            <div className={"flex-1 p-3 sm:p-4 md:p-5 lg:p-6 w-full"}>
                 <Outlet />
             </div>
         </div>

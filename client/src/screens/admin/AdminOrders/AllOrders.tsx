@@ -20,13 +20,13 @@ export function AllOrders () {
 
     useEffect(() => {
         refetchOrders();
-    }, [ pageSize ]);
+    }, [pageSize, refetchOrders]);
 
     if (loadingOrders || !orders) return <Loader message={"Loading orders, please wait a moment..."} />;
     if (ordersError) return <div className={"text-red-500 italic"}>Error: Something went wrong, please try reloading the page.</div>;
 
     return (
-        <main>
+        <main className={"overflow-hidden"}>
             <h2 className={"text-xl font-bold mb-4"}>All Orders</h2>
             {!orders?.data?.length
                 ? <p>No orders found.</p>

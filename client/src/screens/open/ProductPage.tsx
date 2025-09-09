@@ -159,28 +159,28 @@ export function ProductPage () {
                     <div className={"mt-5"}>
                         {!onSale
                             ? <p className={"text-3xl sm:text-5xl font-bold"}>
-                                <span className={"font-light text-2xl sm:text-4xl mr-1"}>₹</span>
+                                <span className={"mr-1"}>$</span>
                                 <span>{price}</span>
                                 <span className={"font-light text-2xl sm:text-4xl"}>/-</span>
                             </p>
                             : <div>
                                 <p>
                                 <span className={"text-green-600 text-3xl sm:text-5xl font-bold mr-3"}>
-                                    <span className={"font-light text-2xl sm:text-4xl mr-1"}>₹</span>
+                                    <span className={"font-light"}>$</span>
                                     <span>{salePrice}</span>
-                                    <span className={"font-light text-2xl sm:text-4xl"}>/-</span>
+                                    <span className={"font-light"}>/-</span>
                                 </span>
-                                    <span className={"text-slate-500 text-2xl sm:text-4xl  font-bold"}>
-                                    <span className={"font-light text-xl sm:text-3xl"}>₹</span>
+                                    <span className={"text-slate-500 text-2xl sm:text-4xl font-bold"}>
+                                    <span className={"font-light"}>$</span>
                                     <span className={"line-through"}>{price}</span>
-                                    <span className={"font-light text-xl sm:text-3xl"}>/-</span>
+                                    <span className={"font-light"}>/-</span>
                                 </span>
                                 </p>
                                 <p className={"mt-2"}>
                                     <span className={"py-1 px-2 text-sm sm:text-base rounded-full bg-blue-500 text-white font-bold"}>
                                         {Math.round((salePrice! / price) * 100)}%
                                     </span>
-                                    <span className={"font-medium text-sm sm:text-base text-blue-500 ml-2"}>You would save ₹{price - salePrice!} on this product.</span>
+                                    <span className={"font-medium text-sm sm:text-base text-blue-500 ml-2"}>You would save ${price - salePrice!} on this product.</span>
                                 </p>
                             </div>
                         }

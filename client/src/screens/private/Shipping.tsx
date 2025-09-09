@@ -59,8 +59,8 @@ export function Shipping () {
                 <h1 className={"text-2xl font-bold"}>Shipping</h1>
                 <p>Select an address to ship or create a new one.</p>
             </section>
-            <section className={"inner my-12"}>
-                <div className={"flex items-center gap-5 mb-5"}>
+            <section className={"inner mt-12"}>
+                <div className={"flex items-center justify-between sm:justify-start gap-5 mb-5"}>
                     <h2 className={"text-xl font-bold"}>Your Addresses</h2>
                     <Button ref={addAddressRef} size={"small"} icon={PlusIcon}>Add new address</Button>
                     <Dialog
@@ -165,7 +165,7 @@ export function Shipping () {
                         </form>
                     </Dialog>
                 </div>
-                <ul className={"grid grid-cols-4 gap-3"}>
+                <ul className={"grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"}>
                     {!addresses?.data?.length
                         ? <li className={"col-span-4 h-20 flex flex-col items-center gap-2"}>
                             <ExclamationCircleIcon className={"size-10"} />
@@ -193,11 +193,13 @@ export function Shipping () {
                         ))
                     }
                 </ul>
+            </section>
+            <section className={"inner mt-4 mb-12 flex justify-end"}>
                 <Button
                     to={"/account/checkout"}
                     size={"large"}
                     icon={CreditCardIcon}
-                    className={"tracking-widest w-max font-semibold mt-5"}
+                    className={"tracking-widest sm:w-max font-semibold mt-5"}
                     disabled={!addressInState?._id}
                 >CONTINUE &rarr;</Button>
             </section>

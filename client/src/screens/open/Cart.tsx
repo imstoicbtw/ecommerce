@@ -18,42 +18,42 @@ export function Cart () {
 
     return (
         <main>
-            <section className={"inner my-12"}>
+            <section className={"inner mt-8 sm:mt-12"}>
                 <h2 className={"text-2xl font-bold"}>Your Cart</h2>
-                {!!cart.discountPrice && <p>Place the order now to save &nbsp;<span className={"font-semibold text-green-600 text-lg"}>₹{cart.discountPrice}.</span></p>}
+                {!!cart.discountPrice && <p>Place the order now to save &nbsp;<span className={"font-semibold text-green-600 text-lg"}>${cart.discountPrice}.</span></p>}
             </section>
-            <section className={"inner my-12 grid grid-cols-3 gap-5"}>
-                <div className={"col-span-2"}>
+            <section className={"inner my-8 sm:my-12 grid lg:grid-cols-3 gap-5"}>
+                <div className={"lg:col-span-2"}>
                     <ul className={"grid grid-cols-1 gap-5"}>
                         {cart.items.map((item) => (<CartListItem cartItem={item} key={"cart_item_" + item.product._id} />))}
                     </ul>
                 </div>
                 <div>
-                    <div className={"sticky top-28 *:border-2 *:rounded-2xl *:p-5"}>
+                    <div className={"sticky top-28 *:border-2 *:rounded-xl sm:*:rounded-2xl *:p-3 sm:*:p-5"}>
                         <ul className={"bg-blue-50 border-blue-100 *:flex *:justify-between *:items-center *:my-2"}>
                             <li>
-                                <h3 className={"text-xl font-bold"}>Subtotal</h3>
-                                <p className={"text-2xl font-bold"}>₹{cart.itemsPrice}</p>
+                                <h3 className={"text-lg sm:text-xl font-bold"}>Subtotal</h3>
+                                <p className={"text-xl sm:text-2xl font-bold"}>${cart.itemsPrice}</p>
                             </li>
                             <li>
-                                <h3 className={"text-xl font-bold"}>Shipping</h3>
-                                <p className={`text-xl font-bold ${cart.shippingPrice ? "" : "text-green-600"}`}>₹{cart.shippingPrice || "Free!"}</p>
+                                <h3 className={"text-lg sm:text-xl font-bold"}>Shipping</h3>
+                                <p className={`text-lg sm:text-xl font-bold ${cart.shippingPrice ? "" : "text-green-600"}`}>${cart.shippingPrice || "Free!"}</p>
                             </li>
                             <li>
-                                <h3 className={"text-xl font-bold"}>Tax (GST)</h3>
-                                <p className={"text-xl font-bold"}>₹{cart.taxPrice}</p>
+                                <h3 className={"text-lg sm:text-xl font-bold"}>Tax (GST)</h3>
+                                <p className={"text-lg sm:text-xl font-bold"}>${cart.taxPrice}</p>
                             </li>
                         </ul>
                         <ul className={"bg-blue-50 border-blue-100 mt-5 *:flex *:justify-between *:items-center"}>
                             <li>
-                                <h3 className={"text-xl font-bold"}>Total</h3>
-                                <p className={"text-2xl font-bold text-blue-500"}>₹{cart.totalPrice}</p>
+                                <h3 className={"text-lg sm:text-xl font-bold"}>Total</h3>
+                                <p className={"text-xl sm:text-2xl font-bold text-blue-500"}>${cart.totalPrice}</p>
                             </li>
                         </ul>
                         {!!cart.discountPrice && <ul className={"bg-green-100 border-green-200 mt-5 *:flex *:justify-between *:items-center"}>
                             <li>
-                                <h3 className={"text-xl font-bold"}>You Saved</h3>
-                                <p className={"text-2xl font-bold text-green-600"}>₹{cart.discountPrice}</p>
+                                <h3 className={"text-lg sm:text-xl font-bold"}>You Saved</h3>
+                                <p className={"text-xl sm:text-2xl font-bold text-green-600"}>${cart.discountPrice}</p>
                             </li>
                         </ul>}
                         <Button

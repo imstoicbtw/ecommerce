@@ -26,7 +26,7 @@ export function DeliveredOrders () {
     if (ordersError) return <div className={"text-red-500 italic"}>Error: Something went wrong, please try reloading the page.</div>;
 
     return (
-        <main>
+        <main className={"overflow-hidden"}>
             <h2 className={"text-xl font-bold mb-4"}>Delivered Orders</h2>
             {!orders?.data?.length
                 ? <p>No delivered orders found.</p>

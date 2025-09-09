@@ -41,10 +41,9 @@ export function CategoriesTable ({ filterKey, filterValue }: Props) {
 
     else if (fetchingCategoriesData) return <div>Loading...</div>;
 
-    else
-        return (
-
-            <table className={"w-full border-separate border-spacing-y-2 text-left"}>
+    return (
+        <div className={"overflow-x-auto"}>
+            <table className={"w-full border-separate border-spacing-3 text-left **:whitespace-nowrap"}>
                 <thead>
                 <tr className={"*:bg-blue-100 *:text-slate-700 *:p-2 rounded-lg"}>
                     <th>Name</th>
@@ -73,6 +72,6 @@ export function CategoriesTable ({ filterKey, filterValue }: Props) {
                 }
                 </tbody>
             </table>
-        )
-            ;
+        </div>
+    );
 }

@@ -136,10 +136,15 @@ export function Profile () {
     return (
         <main>
             <section className={"inner mt-12 flex items-center gap-4"}>
-                <Avatar src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"huge"} />
-                <div>
-                    <p className={"text-lg font-semibold"}>Hello there,</p>
-                    <p className={"text-2xl font-bold"}>{user?.data.name.firstName} {user?.data.name.lastName}</p>
+                <Avatar src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"huge"}
+                        className={"hidden sm:block"}
+                />
+                <Avatar src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"large"}
+                        className={"block sm:hidden"}
+                />
+                <div className={"*:leading-tight"}>
+                    <p className={"text-base sm:text-lg font-semibold"}>Hello there,</p>
+                    <p className={"text-xl sm:text-2xl font-bold"}>{user?.data.name.firstName} {user?.data.name.lastName}</p>
                 </div>
                 <Button ref={editProfileButtonRef} className={"!p-2 !rounded-full ml-5"}><PencilIcon /></Button>
                 <Dialog
@@ -197,13 +202,13 @@ export function Profile () {
                 </Dialog>
             </section>
             <section className={"inner mt-12"}>
-                <h2 className={"text-xl font-bold mb-5"}>Your Orders</h2>
-                <ul className={"grid grid-cols-3 gap-5"}>
+                <h2 className={"text-lg sm:text-xl font-bold mb-5"}>Your Orders</h2>
+                <ul className={"grid md:grid-cols-2 lg:grid-cols-3 gap-5"}>
                     {!orders?.data?.length
                         ? <p className={"text-center text-slate-500"}>You haven't placed any orders yet.</p>
                         : orders?.data.map((order: any) => (
-                            <li key={order._id} className={"relative bg-blue-50 border-blue-100 p-5 rounded-2xl"}>
-                                <h3 className={"text-lg font-semibold"}>Order #{order._id}</h3>
+                            <li key={order._id} className={"relative bg-blue-50 border-blue-100 p-3 sm:p-5 rounded-2xl"}>
+                                <h3 className={"sm:text-lg font-semibold"}>Order #{order._id}</h3>
                                 <p className={"text-slate-500"}>Placed on {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString()}</p>
                                 <p className={"text-lg mt-2"}>Total: {order.totalAmount}</p>
                                 <p className={`text-lg capitalize ${order.status === "pending" ? "text-yellow-600" : "text-green-600"}`}>Status: {order.status}</p>
@@ -218,8 +223,8 @@ export function Profile () {
                 </ul>
             </section>
             <section className={"inner my-12"}>
-                <div className={"flex gap-5 mb-5"}>
-                    <h2 className={"text-xl font-bold"}>Your Addresses</h2>
+                <div className={"flex justify-between sm:justify-start gap-5 mb-5"}>
+                    <h2 className={"text-lg sm:text-xl font-bold"}>Your Addresses</h2>
                     <Button ref={addAddressRef} size={"small"} icon={PlusIcon}>Add new address</Button>
                     <Dialog
                         trigger={addAddressRef}
@@ -323,11 +328,11 @@ export function Profile () {
                         </form>
                     </Dialog>
                 </div>
-                <ul className={"grid grid-cols-3 gap-5"}>
+                <ul className={"grid md:grid-cols-2 lg:grid-cols-3 gap-5"}>
                     {!addresses?.data?.length
                         ? <p className={"text-center text-slate-500"}>You haven't added any addresses yet.</p>
                         : addresses?.data.map((address: any) => (
-                            <li key={address._id} className={"relative bg-blue-50 border-blue-100 p-5 rounded-2xl"}>
+                            <li key={address._id} className={"relative bg-blue-50 border-blue-100 p-3 sm:p-5 rounded-2xl"}>
                                 <h3 className={"text-lg font-semibold"}>{address.name.firstName} {address.name.lastName}</h3>
                                 <address className={"not-italic"}>
                                     <p>+{address.countryCode} {address.phoneNumber}</p>

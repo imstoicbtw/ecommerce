@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./query/baseQuery.ts";
 import { cartSlice } from "./slices/cartSlice.ts";
 import { recentlyViewedSlice } from "./slices/recentlyViewedSlice.ts";
+import { settingsSlice } from "./slices/settingsSlice.ts";
 import { userSlice } from "./slices/userSlice.ts";
 
 
@@ -11,6 +12,7 @@ const store = configureStore({
         [cartSlice.reducerPath]: cartSlice.reducer,
         [recentlyViewedSlice.reducerPath]: recentlyViewedSlice.reducer,
         [userSlice.reducerPath]: userSlice.reducer,
+        [settingsSlice.reducerPath]: settingsSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(apiSlice.middleware),

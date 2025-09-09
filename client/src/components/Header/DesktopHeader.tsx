@@ -1,5 +1,5 @@
 import { ArchiveBoxIcon, ArrowLeftStartOnRectangleIcon, ArrowRightEndOnRectangleIcon, ChevronDownIcon, MagnifyingGlassIcon, QuestionMarkCircleIcon, UserIcon, UserPlusIcon } from "@heroicons/react/24/outline/index";
-import { ClockIcon, ShoppingBagIcon, Squares2X2Icon } from "@heroicons/react/24/solid/index";
+import { BuildingStorefrontIcon, ShoppingBagIcon, Squares2X2Icon } from "@heroicons/react/24/solid/index";
 import { type FormEvent, type SetStateAction, type Dispatch, useRef, type ForwardRefExoticComponent, type PropsWithoutRef, type SVGProps } from "react";
 import { Link, type To } from "react-router-dom";
 import { toast } from "react-toastify/unstyled";
@@ -44,8 +44,8 @@ export default function DesktopHeader ({ handleSearch, search, setSearch, user, 
         <section className={"inner min-h-15 hidden lg:flex gap-10 items-center border-b-2 border-slate-200"}>
             <Link to={"/"}>
                 <h1 className={"flex gap-1 items-center text-xl font-black justify-center leading-0 text-blue-600"}>
-                    <ClockIcon className={"size-5"} />
-                    <span>SHOPHOUR</span>
+                    <BuildingStorefrontIcon className={"size-5"} />
+                    <span>APLAMART</span>
                 </h1>
             </Link>
             <form

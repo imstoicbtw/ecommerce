@@ -41,77 +41,6 @@ export function Screen ({ paypalClientId }: Props) {
     }, [ paypalDispatch, order, loadingPaymentMutation, paypalClientId ]);
 
 
-    // const details = {
-    //     "id": "87J90914F56206641",
-    //     "intent": "CAPTURE",
-    //     "status": "COMPLETED",
-    //     "purchase_units": [
-    //         {
-    //             "reference_id": "default",
-    //             "amount": {
-    //                 "currency_code": "USD",
-    //                 "value": "5000.00",
-    //             },
-    //             "payee": {
-    //                 "email_address": "sb-rwtje46010512@business.example.com",
-    //                 "merchant_id": "3HXD45GZBF7HC",
-    //             },
-    //             "soft_descriptor": "PAYPAL *TEST STORE",
-    //             "shipping": {
-    //                 "name": {
-    //                     "full_name": "Sufiyan Mulla",
-    //                 },
-    //                 "address": {
-    //                     "address_line_1": "Mahalaxmi Puram, Shindoli",
-    //                     "admin_area_2": "Pheonix",
-    //                     "admin_area_1": "AZ",
-    //                     "postal_code": "85001",
-    //                     "country_code": "US",
-    //                 },
-    //             },
-    //             "payments": {
-    //                 "captures": [
-    //                     {
-    //                         "id": "4GT53145L08967528",
-    //                         "status": "COMPLETED",
-    //                         "amount": {
-    //                             "currency_code": "USD",
-    //                             "value": "5000.00",
-    //                         },
-    //                         "final_capture": true,
-    //                         "seller_protection": {
-    //                             "status": "NOT_ELIGIBLE",
-    //                         },
-    //                         "create_time": "2025-09-06T12:44:38Z",
-    //                         "update_time": "2025-09-06T12:44:38Z",
-    //                     },
-    //                 ],
-    //             },
-    //         },
-    //     ],
-    //     "payer": {
-    //         "name": {
-    //             "given_name": "Sufiyan",
-    //             "surname": "Mulla",
-    //         },
-    //         "email_address": "anuriadey@gmail.com",
-    //         "payer_id": "P8MMLJENGKMAC",
-    //         "address": {
-    //             "country_code": "US",
-    //         },
-    //     },
-    //     "create_time": "2025-09-06T12:42:17Z",
-    //     "update_time": "2025-09-06T12:44:38Z",
-    //     "links": [
-    //         {
-    //             "href": "https://api.sandbox.paypal.com/v2/checkout/orders/87J90914F56206641",
-    //             "rel": "self",
-    //             "method": "GET",
-    //         },
-    //     ],
-    // };
-
-
     const onApprove = (_data: any, actions: any) => {
         return actions.order.capture().then(async function (details: any) {
             try {
@@ -155,7 +84,7 @@ export function Screen ({ paypalClientId }: Props) {
                 <h2 className={"text-2xl font-bold"}>Order Summary</h2>
                 <p>Your order has been placed successfuly, please complete the payment so that we can start processing your order. </p>
             </section>
-            <section className={"inner grid grid-cols-2 gap-5 my-12"}>
+            <section className={"inner grid lg:grid-cols-2 gap-5 my-12"}>
                 <div>
                     <div>
                         <h3 className={"text-xl  font-bold"}>Shipping address:</h3>
@@ -172,31 +101,33 @@ export function Screen ({ paypalClientId }: Props) {
                         <p className={"text-lg capitalize"}>Payment status: <span className={"text-green-600"}>{order.data.payment ? order.data.payment?.status : "Pending"}</span></p>
                     </div>
                 </div>
-                <div className={"bg-blue-50 border-2 border-blue-100 rounded-3xl p-10"}>
-                    <ul className={"mb-6"}>
-                        <li className={"flex justify-between font-semibold text-xl"}>
+                <div className={"bg-blue-50 border-2 border-blue-100 rounded-3xl p-5 sm:p-10"}>
+                    <ul className={"mb-6 font-semibold text-lg sm:text-xl *:flex *:justify-between"}>
+                        <li>
                             <h4>Subtotal</h4>
-                            <p>₹{order.data.subTotal}</p>
+                            <p>${order.data.subTotal}</p>
                         </li>
-                        <li className={"flex justify-between font-semibold text-xl"}>
+                        <li>
                             <h4>Shipping</h4>
-                            <p>₹{order.data.shippingAmount}</p>
+                            <p>${order.data.shippingAmount}</p>
                         </li>
-                        <li className={"flex justify-between font-semibold text-xl"}>
+                        <li>
                             <h4>Tax (18%)</h4>
-                            <p>₹{order.data.taxAmount}</p>
+                            <p>${order.data.taxAmount}</p>
                         </li>
-                        <li className={"flex justify-between font-semibold text-2xl mt-2"}>
+                        <li className={"mt-2 text-blue-600 font-bold text-xl sm:text-2xl"}>
                             <h4>{order.data.payment?.status === "completed" ? "Amount paid" : "Amount to pay"}</h4>
-                            <p>₹{order.data.totalAmount}</p>
+                            <p>${order.data.totalAmount}</p>
                         </li>
                     </ul>
                     {!order?.data?.payment && (
-                        <PayPalButtons
-                            createOrder={createOrder}
-                            onApprove={onApprove}
-                            onError={onError}
-                        />
+                        <div className={"max-w-xl mx-auto"}>
+                            <PayPalButtons
+                                createOrder={createOrder}
+                                onApprove={onApprove}
+                                onError={onError}
+                            />
+                        </div>
                     )}
                 </div>
             </section>

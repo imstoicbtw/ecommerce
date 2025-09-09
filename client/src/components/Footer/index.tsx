@@ -1,5 +1,5 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline/index";
-import { ClockIcon } from "@heroicons/react/24/solid/index";
+import { BuildingStorefrontIcon } from "@heroicons/react/24/solid/index";
 import { Link } from "react-router-dom";
 
 
@@ -27,8 +27,8 @@ export default function Footer () {
                     </nav>
                     <div className={"col-span-3 flex flex-col justify-center items-start sm:items-end gap-2"}>
                         <h1 className={"flex gap-1 items-center text-2xl font-black justify-center leading-0 text-blue-500"}>
-                            <ClockIcon className={"size-6 -mt-px"} />
-                            <span>SHOPHOUR</span>
+                            <BuildingStorefrontIcon className={"size-6 -mt-px"} />
+                            <span>APLAMART</span>
                         </h1>
                         <address className={"sm:text-right text-slate-700"}>
                             <p>
@@ -38,7 +38,7 @@ export default function Footer () {
                             </p>
                             <p className={"flex gap-1 items-center sm:justify-end text-blue-600"}>
                                 <EnvelopeIcon className={"size-4"} />
-                                <a href={"mailto:contact@shophour.in"} className={"link"}>contact@shophour.in</a>
+                                <a href={"mailto:contact@aplamart.shop"} className={"link"}>contact@aplamart.shop</a>
                             </p>
                         </address>
                     </div>
@@ -46,7 +46,7 @@ export default function Footer () {
             </section>
             <section className={"inner border-t-2 border-blue-100 py-4"}>
                 <p className={"text-center text-slate-500"}>
-                    &copy; {new Date().getFullYear()} Shophour. All rights reserved.
+                    &copy; {new Date().getFullYear()} Aplamart. All rights reserved.
                 </p>
             </section>
         </footer>

@@ -1,5 +1,5 @@
 import { ArrowLeftStartOnRectangleIcon, ArrowRightEndOnRectangleIcon, MagnifyingGlassIcon, UserPlusIcon } from "@heroicons/react/24/outline/index";
-import { Bars2Icon, ClockIcon, ShoppingBagIcon, Squares2X2Icon, XMarkIcon, UserIcon, ArchiveBoxIcon } from "@heroicons/react/24/solid/index";
+import { Bars2Icon, ShoppingBagIcon, Squares2X2Icon, XMarkIcon, UserIcon, ArchiveBoxIcon, BuildingStorefrontIcon } from "@heroicons/react/24/solid/index";
 import { type Dispatch, type FormEvent, type SetStateAction, useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import type { Store } from "../../redux/store.ts";
@@ -43,8 +43,8 @@ export default function MobileHeader ({ search, setSearch, handleSearch, categor
             <div className={"mb-3 flex gap-10 items-center justify-between"}>
                 <Link to={"/"}>
                     <h1 className={"flex gap-1 items-center text-xl font-black justify-center leading-0 text-blue-600"}>
-                        <ClockIcon className={"size-5"} />
-                        <span>SHOPHOUR</span>
+                        <BuildingStorefrontIcon className={"size-5"} />
+                        <span>APLAMART</span>
                     </h1>
                 </Link>
                 <nav>

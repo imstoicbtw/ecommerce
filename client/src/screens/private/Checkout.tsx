@@ -74,14 +74,14 @@ export function Checkout () {
                 <h3 className={"text-xl font-semibold"}>Products</h3>
                 <ul className={"pt-3 grid gap-2"}>
                     {items?.map(({ product, quantity }) => <li
-                            className={"relative flex gap-3 items-center bg-blue-50 p-3 rounded-2xl border-2 border-blue-100"}
+                            className={"relative flex gap-3 items-center bg-blue-50 p-1 sm:p-3 rounded-2xl border-2 border-blue-100"}
 
                         >
                             <Link to={`/product/${product._id}`}>
                                 <img
                                     src={product.thumbnail.url}
                                     alt={product.thumbnail.alt}
-                                    className={"size-20 object-cover rounded-lg border-2 border-blue-100"}
+                                    className={"size-20 object-cover rounded-xl sm:rounded-lg border-2 border-blue-100"}
                                 />
                             </Link>
                             <div className={"flex flex-col gap-1 h-full justify-center"}>
@@ -95,19 +95,19 @@ export function Checkout () {
                                 <div>
                                     {!product.onSale
                                         ? <p className={"text-xl font-bold"}>
-                                            <span className={"font-light mr-1"}>₹</span>
+                                            <span className={"font-light mr-1"}>$</span>
                                             <span>{product.price}</span>
                                             <span className={"font-light"}>/-</span>
                                         </p>
                                         : (<div>
                                             <p>
                                                 <span className={"text-green-600 font-bold mr-2 text-xl"}>
-                                                    <span className={"font-light mr-1"}>₹</span>
+                                                    <span className={"font-light"}>$</span>
                                                     <span>{product.salePrice}</span>
                                                     <span className={"font-light"}>/-</span>
                                                 </span>
                                                 <span className={"text-slate-500 font-bold text-lg"}>
-                                                    <span className={"font-light"}>₹</span>
+                                                    <span className={"font-light"}>$</span>
                                                     <span className={"line-through"}>{product.price}</span>
                                                     <span className={"font-light"}>/-</span>
                                                 </span>
@@ -135,7 +135,7 @@ export function Checkout () {
                     className={"gap-2"}
                     onClick={handleCreateOrder}
                     loading={loadingOrderMutation}
-                >Pay ₹{cart.totalPrice} &rarr;</Button>
+                >Pay ${cart.totalPrice} &rarr;</Button>
             </section>
         </main>
     );

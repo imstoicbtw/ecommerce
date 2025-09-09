@@ -27,7 +27,7 @@ export function SuccessfulPayments () {
     if (paymentsError) return <div className={"text-red-500 italic"}>Error: Something went wrong, please try reloading the page.</div>;
 
     return (
-        <main>
+        <main className={"overflow-hidden"}>
             <h2 className={"text-xl font-bold mb-4"}>Successful Payments</h2>
             {!payments?.data?.length
                 ? <p>No successful payments found.</p>
