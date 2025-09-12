@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IMediaRawDoc } from "../../../common/dist/mongoose.types.js";
+import { IMediaRawDoc } from "../../../common/dist/mongoose/media.types.js";
 import type { IMediaMethods, IMediaVirtuals, TMediaModel } from "../../../common/dist/mongoose/media.types.js";
 
 

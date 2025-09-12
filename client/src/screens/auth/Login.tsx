@@ -3,8 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify/unstyled";
 import { formatZodErrors } from "../../../../common/dist/utils/format-zod-errors.js";
 import { loginUserReqBody, type loginUserReqBodyType } from "../../../../common/dist/zod/requests/auth.zod.js";
-import * as React from "react";
-import { type FormEvent, useState } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 import { Button } from "../../components/Button.tsx";
 import { Input } from "../../components/Input.tsx";
 import { useLoginMutation } from "../../redux/query/authApiSlice.ts";
@@ -17,20 +16,31 @@ export function Login () {
 
     const dispatch = useDispatch();
 
-    const [ formState, setFormState ] = useState<Partial<loginUserReqBodyType>>({});
+    const [ formState, setFormState ] = useState<loginUserReqBodyType>({
+        email: "", password: "",
+    });
     const [ , setErrors ] = useState<Record<string, string>>({});
     const [ login, { isLoading } ] = useLoginMutation();
     const navigate = useNavigate();
     const location = useLocation();
     const redirect = new URLSearchParams(location.search).get("redirect");
 
-    function handleChange (event: React.ChangeEvent<HTMLFormElement>) {
+    function handleChange (event: ChangeEvent<HTMLInputElement>) {
         setFormState(prevState => {
             const newState = { ...prevState };
-            setIn(newState, event.target.name, event.target.value);
+            setIn(newState, event.currentTarget.name, event.currentTarget.value);
             return newState;
         });
     }
+
+    const handleAdminLogin = () => {
+        setFormState(prevState => {
+            const newState = { ...prevState };
+            setIn(newState, "email", "admin@mail.com");
+            setIn(newState, "password", "Admin#3");
+            return newState;
+        });
+    };
 
     async function handleSubmit (event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
@@ -67,7 +77,6 @@ export function Login () {
                 Welcome back!
             </h2>
             <form
-                onChange={handleChange}
                 onSubmit={handleSubmit}
                 className={"grid gap-4 w-xs m-auto"}
             >
@@ -76,13 +85,23 @@ export function Login () {
                     label={"Email"}
                     placeholder="Eg. johndoe@gmail.com"
                     autoFocus={true}
+                    value={formState.email}
+                    onChange={handleChange}
                 />
                 <Input
                     name="password"
                     label={"Password"}
                     placeholder="Your password"
                     type={"password"}
+                    value={formState.password}
+                    onChange={handleChange}
                 />
+                <div>
+                    <Button
+                        type={"button"} variant={"plain"} size={"small"} className={"!p-0 m-auto"}
+                        onClick={handleAdminLogin}
+                    >Login as admin</Button>
+                </div>
                 <Button type={"submit"} loading={isLoading}>Login</Button>
             </form>
             <p className={"text-center text-sm text-gray-500 mt-4"}>

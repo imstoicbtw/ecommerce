@@ -6,11 +6,10 @@ import { connectDb } from "./config/db.config.js";
 // Environment variables
 const { PORT, MONGO_URI } = process.env;
 
-
+console.log(MONGO_URI);
 
 // Database
 await connectDb(MONGO_URI as string);
-
 
 
 // Start listening...

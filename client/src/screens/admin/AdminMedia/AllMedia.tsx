@@ -10,16 +10,19 @@ import { useLocation } from "react-router-dom";
 
 
 export function AllMedia () {
-    const { search } = useLocation();
-    const params = getRequestMeta(search);
+    const location = useLocation();
+    const [ params, setParams ] = useState<{ size?: number; page?: number; keyword?: string; }>({});
     const [ pageSize, setPageSize ] = useState<number | undefined>(params.size);
-    const { data: media, isLoading: queryLoading, error, refetch: refetchProducts } = useGetMediaQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
+    const { data: media, isLoading: queryLoading, error, refetch: refetchMedia } = useGetMediaQuery({ ...params, size: pageSize }, { refetchOnMountOrArgChange: true });
     const [ deleteMedia, { isError, isLoading: mutationLoading } ] = useDeleteMediaMutation();
 
     useEffect(() => {
-        refetchProducts();
+        refetchMedia();
     }, [ pageSize ]);
 
+    useEffect(() => {
+        setParams(getRequestMeta(location.search));
+    }, [ location ]);
 
     const deleteMediaHandler = async (event: MouseEvent<HTMLButtonElement>, mediaId: string) => {
         const currentTarget = event.currentTarget;
@@ -28,7 +31,7 @@ export function AllMedia () {
         if (isError) toast.error("Something went wrong, please try again.");
         if (!response.data.success) toast.error(response.data.message);
         toast.success(response.data.message);
-        currentTarget.parentElement?.remove();
+        refetchMedia();
     };
 
     if (queryLoading) return <div>Loading...</div>;

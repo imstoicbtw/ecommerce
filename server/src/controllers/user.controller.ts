@@ -174,6 +174,10 @@ export async function getCurrentUser (req: Request, res: Response): Promise<void
  */
 export async function updateCurrentUserDetails (req: Request, res: Response): Promise<void> {
     const { user, body } = req;
+    if (user.email === "admin@mail.com") {
+        res.status(403);
+        throw new Error("You cannot change the details of this admin account!");
+    }
     user.set(body);
     const updatedUser: TUser = await user.save();
     res.json({
@@ -220,6 +224,10 @@ export async function updatePassword (req: Request, res: Response): Promise<void
     if (!user) {
         res.status(404);
         throw new Error("User not found!");
+    }
+    if (user.email === "admin@mail.com") {
+        res.status(403);
+        throw new Error("You cannot change the password of the admin account!");
     }
     const isPasswordCorrect: boolean = await user.comparePassword(oldPassword);
     if (!isPasswordCorrect) {

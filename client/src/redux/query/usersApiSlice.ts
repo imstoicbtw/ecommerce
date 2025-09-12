@@ -56,8 +56,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         updatePassword: builder.mutation({
-            query: (body: updatePasswordReqBodyType & { userId: string }) => ({
-                url: `${USERS_URL}/${body.userId}/password`,
+            query: (body: updatePasswordReqBodyType) => ({
+                url: `${USERS_URL}/current-user/password`,
+                method: "PATCH",
+                body,
             }),
         }),
         getMyAddresses: builder.query({

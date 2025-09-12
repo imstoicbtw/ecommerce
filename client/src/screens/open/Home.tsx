@@ -23,7 +23,7 @@ export function Home () {
     return (
         <main>
             <section className={"inner mt-3"}>
-                <div className={"text-white shadow-2xl min-h-64 bg-[url(stars.gif)] bg-black rounded-3xl flex flex-col justify-center items-center py-20"}>
+                <div className={"text-white shadow-2xl min-h-64 bg-[url(/stars.gif)] bg-black rounded-3xl flex flex-col justify-center items-center py-20"}>
                     <h2 className={"text-6xl md:text-8xl leading-none font-black opacity-90 blur-xs tracking-widest text-blue-200 uppercase text-center"}>
                         Happy Diwali
                     </h2>

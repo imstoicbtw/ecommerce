@@ -19,7 +19,7 @@ export type updateUserRoleReqBodyType = zod.infer<typeof updateUserRoleReqBody>;
 
 // * updatePassword
 export const updatePasswordReqBody = zod.object({
-    oldPassword: zodString("Old password in invalid"),
+    oldPassword: zodString("Old password is invalid"),
     newPassword: zodPassword(),
 }, {message: "This must be an object."});
 export type updatePasswordReqBodyType = zod.infer<typeof updatePasswordReqBody>;

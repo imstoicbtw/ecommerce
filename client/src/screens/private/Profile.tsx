@@ -1,7 +1,7 @@
 import { PlusIcon } from "@heroicons/react/16/solid/index";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline/index";
+import { LockClosedIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline/index";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline/index";
-import { addNewAddressReqBody, type addNewAddressReqBodyType, updateCurrentUserDetailsReqBody, type updateCurrentUserDetailsReqBodyType } from "common/dist/zod/requests/user.zod.js";
+import { addNewAddressReqBody, type addNewAddressReqBodyType, updateCurrentUserDetailsReqBody, type updateCurrentUserDetailsReqBodyType, updatePasswordReqBody, type updatePasswordReqBodyType } from "common/dist/zod/requests/user.zod.js";
 import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify/unstyled";
@@ -12,7 +12,7 @@ import { Input } from "../../components/Input.tsx";
 import { Loader } from "../../components/Loader.tsx";
 import { SelectInput } from "../../components/SelectInput.tsx";
 import { useGetMyOrdersQuery } from "../../redux/query/ordersApiSlice.ts";
-import { useAddNewAddressMutation, useDeleteMyAddressMutation, useGetCurrentUserQuery, useGetMyAddressesQuery, useUpdateCurrentUserDetailsMutation, useUploadAvatarMutation } from "../../redux/query/usersApiSlice.ts";
+import { useAddNewAddressMutation, useDeleteMyAddressMutation, useGetCurrentUserQuery, useGetMyAddressesQuery, useUpdateCurrentUserDetailsMutation, useUpdatePasswordMutation, useUploadAvatarMutation } from "../../redux/query/usersApiSlice.ts";
 import { initialNewAddress } from "../../redux/slices/cartSlice.ts";
 import { setUser } from "../../redux/slices/userSlice.ts";
 import { setIn } from "../../utils/object-mutation.util.ts";
@@ -26,6 +26,7 @@ export function Profile () {
     const [ deleteMyAddress, { isLoading: loadingDeleteAddressMutation } ] = useDeleteMyAddressMutation();
     const [ uploadAvatar, { isLoading: loadingUploadAvatarMutation } ] = useUploadAvatarMutation();
     const [ addNewAddress ] = useAddNewAddressMutation();
+    const [ updatePassword ] = useUpdatePasswordMutation();
 
     const { data: user, isLoading: loadingUser, refetch: refetchUser } = useGetCurrentUserQuery(null, {
         refetchOnMountOrArgChange: true,
@@ -39,9 +40,15 @@ export function Profile () {
 
     const editProfileButtonRef = useRef<HTMLButtonElement | null>(null);
     const addAddressRef = useRef<HTMLButtonElement | null>(null);
+    const updatePasswordButtonRef = useRef<HTMLButtonElement | null>(null);
 
     const [ editProfile, setEditProfile ] = useState<Partial<updateCurrentUserDetailsReqBodyType>>({});
     const [ newAddress, setNewAddress ] = useState<addNewAddressReqBodyType>(initialNewAddress);
+    const [ password, setPassword ] = useState<updatePasswordReqBodyType>({
+        oldPassword: "",
+        newPassword: "",
+    });
+    const [ confirmPassword, setConfirmPassword ] = useState<string>("");
 
     useEffect(() => {
         setEditProfile({
@@ -71,6 +78,14 @@ export function Profile () {
 
     const handleAddressInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setNewAddress(prevState => {
+            const newState = { ...prevState };
+            setIn(newState, event.target.name, event.target.value);
+            return newState;
+        });
+    };
+
+    const handlePasswordInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        setPassword(prevState => {
             const newState = { ...prevState };
             setIn(newState, event.target.name, event.target.value);
             return newState;
@@ -131,75 +146,138 @@ export function Profile () {
     };
 
 
+    const handlePasswordUpdate = async () => {
+        const result = updatePasswordReqBody.safeParse(password);
+        if (!result.success) return { success: false, message: "Passwords are incorrect." };
+        if (result.data.newPassword !== confirmPassword) return { success: false, message: "Passwords do not match." };
+        try {
+            const response = await updatePassword(result.data).unwrap();
+            setPassword({ newPassword: "", oldPassword: "" });
+            setConfirmPassword("");
+            return { success: true, message: response.data?.message || "Password updated successfully." };
+        } catch (error: any) {
+            return { success: false, message: error?.data?.message || "Something went wrong, please try again later." };
+        }
+    };
+
+
     if (loadingUser || loadingOrders || loadingAddresses) return <Loader />;
 
     return (
         <main>
             <section className={"inner mt-12 flex items-center gap-4"}>
-                <Avatar src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"huge"}
-                        className={"hidden sm:block"}
+                <div className={"flex flex-col gap-1"}>
+                    <Button ref={editProfileButtonRef} className={"!p-2 !rounded-full"}>
+                        <PencilIcon />
+                    </Button>
+                    <Dialog
+                        trigger={editProfileButtonRef}
+                        heading={"Edit Profile"}
+                        submitAction={handleProfileEditSubmit}
+                        loading={loadingUploadAvatarMutation}
+                    >
+                        <form
+                            onSubmit={(event) => event.preventDefault()}
+                            className={"grid gap-3"}
+                        >
+                            <div className={"grid grid-cols-2 gap-3"}>
+                                <Input
+                                    name={"name.firstName"}
+                                    label={"First Name"}
+                                    placeholder={"Eg. John"}
+                                    value={editProfile?.name?.firstName}
+                                    onChange={handleProfileInputChange}
+                                />
+                                <Input
+                                    name={"name.lastName"}
+                                    label={"Last Name"}
+                                    placeholder={"Eg. Doe"}
+                                    value={editProfile?.name?.lastName}
+                                    onChange={handleProfileInputChange}
+                                />
+                            </div>
+                            <Input
+                                name={"email"}
+                                label={"Email"}
+                                placeholder={"Eg. johndoe@example.com"}
+                                value={editProfile?.email}
+                                onChange={handleProfileInputChange}
+                            />
+                        </form>
+                        <form
+                            className={"mt-6 border-t border-slate-200 pt-3"}
+                            onChange={handleUploadAvatar}
+                        >
+                            <h3 className={"text-lg font-bold"}>Change Avatar</h3>
+                            <p className={"text-sm text-slate-500 leading-none"}>Upload a new avatar image.</p>
+                            <label htmlFor={"avatar"} className={"grid place-items-center cursor-pointer rounded-xl border-2 border-dashed border-slate-300 hover:border-blue-500 hover:text-blue-600 p-5 mt-3"}>
+                                <span>Upload Image</span>
+                                <input
+                                    id={"avatar"}
+                                    type={"file"}
+                                    accept={"image/*"}
+                                    className={"hidden"}
+                                    name={"avatar"}
+                                    disabled={loadingUploadAvatarMutation}
+                                />
+                            </label>
+                        </form>
+                    </Dialog>
+                    <Button ref={updatePasswordButtonRef} className={"!p-2 !rounded-full"} variant={"success"}>
+                        <LockClosedIcon />
+                    </Button>
+                    <Dialog
+                        trigger={updatePasswordButtonRef}
+                        heading={"Update Password"}
+                        submitAction={handlePasswordUpdate}
+                        submitLabel={"Update"}
+                    >
+                        <form
+                            onSubmit={(event) => event.preventDefault()}
+                            className={"grid gap-3"}
+                        >
+                            <Input
+                                name={"oldPassword"}
+                                label={"Old Password"}
+                                type={"password"}
+                                placeholder={"Old Password"}
+                                value={password.oldPassword}
+                                onChange={handlePasswordInputChange}
+                            />
+                            <div>
+                                <Input
+                                    name={"newPassword"}
+                                    label={"New Password"}
+                                    placeholder={"New Password"}
+                                    type={"password"}
+                                    value={password.newPassword}
+                                    onChange={handlePasswordInputChange}
+                                />
+                                <Input
+                                    name={"confirmNewPassword"}
+                                    type={"password"}
+                                    placeholder={"Confirm New Password"}
+                                    description={"Must be 6 characters or long and must contain at least one alphabet, one number, and one special character."}
+                                    className={"mt-1"}
+                                    onChange={event => setConfirmPassword(event.currentTarget.value)}
+                                />
+                            </div>
+                        </form>
+                    </Dialog>
+                </div>
+                <Avatar
+                    src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"huge"}
+                    className={"hidden sm:grid"}
                 />
-                <Avatar src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"large"}
-                        className={"block sm:hidden"}
+                <Avatar
+                    src={user?.data.avatar?.url} fallback={user?.data.name.firstName} size={"large"}
+                    className={"grid sm:hidden"}
                 />
                 <div className={"*:leading-tight"}>
                     <p className={"text-base sm:text-lg font-semibold"}>Hello there,</p>
                     <p className={"text-xl sm:text-2xl font-bold"}>{user?.data.name.firstName} {user?.data.name.lastName}</p>
                 </div>
-                <Button ref={editProfileButtonRef} className={"!p-2 !rounded-full ml-5"}><PencilIcon /></Button>
-                <Dialog
-                    trigger={editProfileButtonRef}
-                    heading={"Edit Profile"}
-                    submitAction={handleProfileEditSubmit}
-                    loading={loadingUploadAvatarMutation}
-                >
-                    <form
-                        onSubmit={(event) => event.preventDefault()}
-                        className={"grid gap-3"}
-                    >
-                        <div className={"grid grid-cols-2 gap-3"}>
-                            <Input
-                                name={"name.firstName"}
-                                label={"First Name"}
-                                placeholder={"Eg. John"}
-                                value={editProfile?.name?.firstName}
-                                onChange={handleProfileInputChange}
-                            />
-                            <Input
-                                name={"name.lastName"}
-                                label={"Last Name"}
-                                placeholder={"Eg. Doe"}
-                                value={editProfile?.name?.lastName}
-                                onChange={handleProfileInputChange}
-                            />
-                        </div>
-                        <Input
-                            name={"email"}
-                            label={"Email"}
-                            placeholder={"Eg. johndoe@example.com"}
-                            value={editProfile?.email}
-                            onChange={handleProfileInputChange}
-                        />
-                    </form>
-                    <form
-                        className={"mt-6 border-t border-slate-200 pt-3"}
-                        onChange={handleUploadAvatar}
-                    >
-                        <h3 className={"text-lg font-bold"}>Change Avatar</h3>
-                        <p className={"text-sm text-slate-500 leading-none"}>Upload a new avatar image.</p>
-                        <label htmlFor={"avatar"} className={"grid place-items-center cursor-pointer rounded-xl border-2 border-dashed border-slate-300 hover:border-blue-500 hover:text-blue-600 p-5 mt-3"}>
-                            <span>Upload Image</span>
-                            <input
-                                id={"avatar"}
-                                type={"file"}
-                                accept={"image/*"}
-                                className={"hidden"}
-                                name={"avatar"}
-                                disabled={loadingUploadAvatarMutation}
-                            />
-                        </label>
-                    </form>
-                </Dialog>
+
             </section>
             <section className={"inner mt-12"}>
                 <h2 className={"text-lg sm:text-xl font-bold mb-5"}>Your Orders</h2>

@@ -31,7 +31,7 @@ export default function AdminHome () {
             </section>
             <section className={"mt-5"}>
                 <ul className={"grid sm:grid-cols-2 md:grid-cols-4 gap-3 text-white *:bg-blue-500 *:border-2 *:border-blue-600 *:rounded-2xl *:p-5"}>
-                    {(Object.entries(stats?.data) as [ string, number ][]).map(([ key, value ]) => (
+                    {stats?.data && (Object.entries(stats.data) as [ string, number ][]).map(([ key, value ]) => (
                         <li key={key}>
                             <div className={"text-lg font-semibold"}>{key}</div>
                             <div className={"text-3xl font-bold mt-2"}>{value}</div>
@@ -39,11 +39,13 @@ export default function AdminHome () {
                     ))}
                 </ul>
             </section>
-            <section className={"mt-6"}>
-                <h2 className={"text-xl sm:text-2xl leading-tight font-bold"}>Recent orders waiting to be shipped.</h2>
-                <OrdersTable receivedOrders={orders.data} />
-                <Button className={"mt-6 m-auto w-max"} to={"/dashboard/orders/pending/"}>View All &rarr;</Button>
-            </section>
+            {orders?.data && (
+                <section className={"mt-6"}>
+                    <h2 className={"text-xl sm:text-2xl leading-tight font-bold"}>Recent orders waiting to be shipped.</h2>
+                    <OrdersTable receivedOrders={orders.data} />
+                    <Button className={"mt-6 m-auto w-max"} to={"/dashboard/orders/pending/"}>View All &rarr;</Button>
+                </section>
+            )}
         </main>
     );
 }

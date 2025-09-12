@@ -7,17 +7,17 @@ type Props = {
     to: string;
 } & Omit<ComponentProps<"a">, "href">;
 
-const cn = ({isActive}: NavLinkRenderProps): string => {
-    return `flex items-center gap-2 p-3 rounded-lg ${isActive ? "text-blue-600 bg-blue-50" : "hover:text-blue-600 hover:bg-blue-50"}`;
+const cn = ({ isActive }: NavLinkRenderProps): string => {
+    return `flex items-center gap-2 p-3 rounded-lg border-2 ${isActive ? "text-blue-600 bg-blue-50 border-blue-100" : "hover:text-blue-600 hover:bg-blue-50 border-transparent"}`;
 };
 
-export default function ({icon: Icon, children, ...props}: Props) {
+export default function MenuItem({ icon: Icon, children, ...props }: Props) {
     return (
         <li className={"list-none"}>
             <NavLink className={cn} {...props}>
                 <Icon className={"w-5 mb-0.5"} />
                 <span>
-                {children}
+                    {children}
                 </span>
             </NavLink>
         </li>

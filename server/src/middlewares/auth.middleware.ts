@@ -21,7 +21,6 @@ export async function authenticate (req: Request, res: Response, next: NextFunct
         return next();
     } catch (error) {
     }
-    console.log(JSON.stringify(req.cookies, null, 2));
     try {
         const { refreshToken } = req.cookies;
         if (!refreshToken) throw new Error("You are not logged in, please login.");

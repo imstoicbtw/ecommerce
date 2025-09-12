@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "watch": "tsc -w -p tsconfig.json",
-    "build": "rm -rf dist && tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

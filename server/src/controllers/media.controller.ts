@@ -70,7 +70,6 @@ export async function uploadMedia (req: Request, res: Response): Promise<void> {
     const result: Array<TMediaLean> = await Promise.all(
         media.map(async (item): Promise<TMediaLean> => await item.save()),
     );
-    console.log(result);
     res.json({
         success: true,
         message: "Media uploaded successfully.",
