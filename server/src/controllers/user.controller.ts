@@ -53,7 +53,7 @@ export async function getCustomers (req: Request, res: Response): Promise<void> 
 
     const count = await UserModel.countDocuments({ ...searchQuery });
     const customers: TUser[] = await UserModel
-        .find({ ...searchQuery })
+        .find({ ...searchQuery, role: "customer" })
         .limit(+size)
         .skip((+page - 1) * +size);
 

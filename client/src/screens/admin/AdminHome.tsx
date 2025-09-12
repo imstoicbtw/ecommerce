@@ -39,13 +39,17 @@ export default function AdminHome () {
                     ))}
                 </ul>
             </section>
-            {orders?.data && (
-                <section className={"mt-6"}>
-                    <h2 className={"text-xl sm:text-2xl leading-tight font-bold"}>Recent orders waiting to be shipped.</h2>
-                    <OrdersTable receivedOrders={orders.data} />
-                    <Button className={"mt-6 m-auto w-max"} to={"/dashboard/orders/pending/"}>View All &rarr;</Button>
-                </section>
-            )}
+            <section className={"mt-6"}>
+                {orders?.data?.length ? (
+                    <>
+                        <h2 className={"text-xl sm:text-2xl leading-tight font-bold"}>Recent orders waiting to be shipped.</h2>
+                        <OrdersTable receivedOrders={orders.data} />
+                        <Button className={"mt-6 m-auto w-max"} to={"/dashboard/orders/pending/"}>View All &rarr;</Button>
+                    </>
+                ) : (
+                    <p className={"text-center mt-10"}>No recent orders.</p>
+                )}
+            </section>
         </main>
     );
 }

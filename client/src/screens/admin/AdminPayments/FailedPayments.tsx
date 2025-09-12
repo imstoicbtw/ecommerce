@@ -28,7 +28,7 @@ export function FailedPayments () {
 
     return (
         <main className={"overflow-hidden"}>
-            <h2 className={"text-xl font-bold mb-4"}>Successful Payments</h2>
+            <h2 className={"text-xl font-bold mb-4"}>Failed Payments</h2>
             {!payments?.data?.length
                 ? <p>No failed payments found.</p>
                 : <>

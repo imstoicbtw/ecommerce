@@ -41,6 +41,8 @@ export function CategoriesTable ({ filterKey, filterValue }: Props) {
 
     else if (fetchingCategoriesData) return <div>Loading...</div>;
 
+    else if (categories && !categories.length) return <main>No categories found.</main>;
+
     return (
         <div className={"overflow-x-auto"}>
             <table className={"w-full border-separate border-spacing-3 text-left **:whitespace-nowrap"}>
