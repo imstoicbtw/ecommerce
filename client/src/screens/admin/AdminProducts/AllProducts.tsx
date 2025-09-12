@@ -25,6 +25,7 @@ export function AllProducts () {
 
     if (loadingProducts || !products) return <Loader message={"Loading products..."} />;
     if (productsError) return <div className={"text-red-500 italic"}>Error: Something went wrong, please try reloading the page.</div>;
+    if (products.data && !products?.data?.length) return <main>No products found.</main>;
 
     return (
         <main className={"overflow-hidden"}>
