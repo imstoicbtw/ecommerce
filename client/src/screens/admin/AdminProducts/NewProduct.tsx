@@ -14,9 +14,12 @@ import { ToggleInput } from "../../../components/ToggleInput.tsx";
 import { useGetCategoriesQuery } from "../../../redux/query/categoriesApiSlice.ts";
 import { useGetGalleryQuery, useGetMediaByIdQuery } from "../../../redux/query/mediaApiSlice.ts";
 import { useCreateProductMutation } from "../../../redux/query/productsApiSlice.ts";
+import { useNavigate } from "react-router-dom";
 
 
 export function NewProduct () {
+
+    const navigate = useNavigate();
 
     const { data: fetchedCategories } = useGetCategoriesQuery(null);
     const [ createProduct, { isLoading: loadingProductMutation } ] = useCreateProductMutation();
@@ -87,6 +90,7 @@ export function NewProduct () {
             const response = await createProduct(parsed.data).unwrap();
             if (!response.success) throw new Error(response.message);
             toast.success(response.message);
+            navigate(`/dashboard/products/edit/${response.data._id}`)
         } catch (error: any) {
             toast.error(error?.message || error.data?.message || "An error occurred while creating the product.");
         }

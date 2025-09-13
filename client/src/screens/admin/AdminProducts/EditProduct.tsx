@@ -110,7 +110,7 @@ export function EditProduct () {
 
     return (
         <main>
-            <h1 className={"font-bold text-xl"}>Add New Product</h1>
+            <h1 className={"font-bold text-xl"}>Edit Product</h1>
             <form className={"mt-10 flex flex-col gap-5"} onSubmit={handleSubmit}>
                 <Input
                     name={"name"}
