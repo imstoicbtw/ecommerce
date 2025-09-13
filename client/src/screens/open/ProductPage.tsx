@@ -30,7 +30,7 @@ import type { Store } from "../../redux/store.ts";
 type Product = Omit<IProductRawDoc, "category" | "thumbnail" | "gallery"> & {
     _id: string;
     category: { name: string, slug: string };
-    thumbnail: IMediaRawDoc & { _id: string };
+    thumbnail: IMediaRawDoc & { _id: string } | null;
     gallery: Array<IMediaRawDoc & { _id: string }>;
 };
 
@@ -126,7 +126,7 @@ export function ProductPage () {
                     <Gallery
                         gallery={[
                             thumbnail,
-                            ...gallery.filter(item => item._id !== thumbnail._id),
+                            ...gallery.filter(item => item._id !== thumbnail?._id),
                         ]}
                     />
                 </div>

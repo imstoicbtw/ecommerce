@@ -59,7 +59,7 @@ export function PaymentsTable ({ receivedPayments }: Props) {
                             {payment.transactionId}
                         </td>
                         <td className={"text-right text-lg font-semibold"}>
-                            ₹{payment.amount}
+                            ${payment.amount}
                         </td>
                     </tr>
                 ))}

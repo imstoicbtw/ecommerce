@@ -56,7 +56,7 @@ export function OrdersTable ({ receivedOrders }: Props) {
                             </Link>
                         </td>
                         <td className={"text-right text-lg font-semibold"}>
-                            ₹{order.totalAmount}
+                            ${order.totalAmount}
                         </td>
                     </tr>
                 ))}

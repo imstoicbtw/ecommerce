@@ -4,7 +4,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export type RecentlyViewedItem = Omit<IProductRawDoc, "thumbnail" | "gallery" | "reviews" | "category"> & {
     _id: string;
-    thumbnail: { url: string };
+    thumbnail: { url: string } | null;
     category: { name: string, slug: string };
     reviews: IProductReviewRawDoc[];
 };

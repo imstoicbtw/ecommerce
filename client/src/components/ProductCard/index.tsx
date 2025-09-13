@@ -8,7 +8,7 @@ type Props = {
     product: Omit<IProductRawDoc, "category" | "thumbnail" | "gallery"> & {
         _id: string;
         category: { name: string, slug: string };
-        thumbnail: { url: string };
+        thumbnail: { url: string } | null;
         gallery?: Array<IMediaRawDoc & { _id: string }>;
     };
 }
@@ -20,7 +20,7 @@ export default function ProductCard ({ product }: Props) {
     return (
         <li className={"list-none"}>
             <Link to={`/product/${productId}`} className={"bg-blue-50 block rounded-xl md:rounded-3xl p-1 md:p-3 border-2 border-blue-100 hover:bg-blue-100 hover:shadow-xl"}>
-                <div style={{ backgroundImage: `url(${thumbnail.url})` }} className={"flex items-end  rounded-lg md:rounded-xl aspect-square p-2 bg-cover"}>
+                <div style={{ backgroundImage: `url(${thumbnail?.url || "/placeholder.png"})` }} className={"flex items-end  rounded-lg md:rounded-xl aspect-square p-2 bg-cover"}>
                     <span className={"text-[8px] md:text-xs uppercase px-1.5 pt-0.5 rounded-full bg-blue-100 border-2 border-blue-200 text-blue-600 font-semibold"}>
                         {category.name}
                     </span>

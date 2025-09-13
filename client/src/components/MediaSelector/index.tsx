@@ -8,16 +8,16 @@ import { Button } from "../Button.tsx";
 
 type Props = {
     trigger: RefObject<HTMLButtonElement | HTMLDivElement | null>;
-    mediaState: string[];
-    setMediaState: React.Dispatch<SetStateAction<string[]>>;
+    mediaState: (string | null)[];
+    setMediaState: React.Dispatch<SetStateAction<(string | null)[]>>;
     limit?: number;
 };
 
-export default function MediaSelector({ trigger, mediaState, setMediaState, limit = Infinity }: Props) {
+export default function MediaSelector ({ trigger, mediaState, setMediaState, limit = Infinity }: Props) {
 
     const { currentData: media } = useGetMediaQuery({ size: 1000 });
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selectedMedia, setSelectedMedia] = useState<string[]>([]);
+    const [ isOpen, setIsOpen ] = useState<boolean>(false);
+    const [ selectedMedia, setSelectedMedia ] = useState<(string | null)[]>([]);
     const location = useLocation();
 
     const openDialog = (): void => {
@@ -31,22 +31,22 @@ export default function MediaSelector({ trigger, mediaState, setMediaState, limi
     };
 
     const handleSubmit = async () => {
-        setMediaState([...new Set([...selectedMedia])]);
+        setMediaState([ ...new Set([ ...selectedMedia ]) ]);
         closeDialog();
     };
 
     useEffect(() => {
         setIsOpen(false);
-    }, [location]);
+    }, [ location ]);
 
     useEffect(() => {
-        setSelectedMedia([...mediaState]);
-    }, [mediaState]);
+        setSelectedMedia([ ...mediaState ]);
+    }, [ mediaState ]);
 
     useEffect(() => {
         trigger.current?.addEventListener("click", openDialog);
         return (): void => trigger.current?.removeEventListener("click", openDialog);
-    }, [trigger]);
+    }, [ trigger ]);
 
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent): void => {
@@ -54,7 +54,7 @@ export default function MediaSelector({ trigger, mediaState, setMediaState, limi
         };
         document.addEventListener("keydown", handleEscape);
         return (): void => document.removeEventListener("keydown", handleEscape);
-    }, [closeDialog]);
+    }, [ closeDialog ]);
 
     if (!isOpen) return null;
 
@@ -65,7 +65,7 @@ export default function MediaSelector({ trigger, mediaState, setMediaState, limi
                 <div className="flex-grow h-[500px] max-h-[60vh] overflow-y-auto">
                     <div className={"grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"}>
                         {
-                            [...media.data].map(({ _id: id, url, name }: IMediaRawDoc & { _id: string; }) => (
+                            [ ...media.data ].map(({ _id: id, url, name }: IMediaRawDoc & { _id: string; }) => (
                                 <div
                                     key={id}
                                     className={`relative cursor-pointer rounded-xl overflow-hidden border-4 ${selectedMedia.includes(id) ? "border-blue-500" : "border-transparent"}`}
@@ -75,7 +75,7 @@ export default function MediaSelector({ trigger, mediaState, setMediaState, limi
                                             setSelectedMedia(newSelectedMedia);
                                             return;
                                         } else if (limit && selectedMedia.length >= limit) return;
-                                        setSelectedMedia([...selectedMedia, id]);
+                                        setSelectedMedia([ ...selectedMedia, id ]);
                                     }}
                                 >
                                     {selectedMedia.includes(id) && (
@@ -84,7 +84,7 @@ export default function MediaSelector({ trigger, mediaState, setMediaState, limi
                                         </div>
                                     )}
                                     <img
-                                        src={url}
+                                        src={url || "/placeholder.png"}
                                         alt={name}
                                         className={"w-full h-full aspect-square object-cover"}
                                     />

@@ -8,7 +8,7 @@ import type { addNewAddressReqBodyType } from "common/dist/zod/requests/user.zod
 export type CartItem = {
     product: Omit<IProductRawDoc, "thumbnail" | "gallery" | "reviews" | "category" | "description"> & {
         _id: string;
-        thumbnail: IMediaRawDoc;
+        thumbnail: IMediaRawDoc|null;
     };
     quantity: number;
 };

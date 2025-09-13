@@ -14,9 +14,9 @@ import { useGetOrderByIdQuery, useUpdateOrderStatusMutation } from "../../../red
 
 
 type Order = Omit<IOrderRawDoc, "products" | "payment" | "user"> & { _id: string } & {
-    products: { price: number, quantity: number, savedAmount: number, product: { name: string, thumbnail: { url: string } } }[],
-    payment: IPaymentRawDoc & { _id: string },
-    user: Pick<IUserRawDoc, "name" | "email" | "avatar"> & { _id: string },
+    products: { price: number; quantity: number; savedAmount: number; product: { _id: string; name: string; thumbnail: { url: string } | null } }[];
+    payment: IPaymentRawDoc & { _id: string };
+    user: Pick<IUserRawDoc, "name" | "email" | "avatar"> & { _id: string };
     createdAt: string;
 };
 
@@ -76,7 +76,7 @@ export function OrderView () {
                     </li>
                     <li className={"flex gap-2"}>
                         <span className={"font-semibold"}>Order Total:</span>
-                        <span>₹{order.totalAmount}</span>
+                        <span>${order.totalAmount}</span>
                     </li>
                     <li className={"flex gap-2 items-center"}>
                         <span className={"font-semibold"}>Order Status:</span>
@@ -103,10 +103,10 @@ export function OrderView () {
                             </SelectInput>
                         </Dialog>
                     </li>
-                    <li className={"flex gap-2 capitalize"}>
+                    {order.payment && <li className={"flex gap-2 capitalize"}>
                         <span className={"font-semibold"}>Payment Method:</span>
                         <span>{order.payment.paymentGateway}</span>
-                    </li>
+                    </li>}
                 </ul>
             </section>
             <section className={"mt-6"}>
@@ -121,11 +121,11 @@ export function OrderView () {
                 <h3 className={"text-lg font-bold mb-1"}>Order Items</h3>
                 <ul className={"mt-3 grid grid-cols-1 gap-2"}>
                     {order.products.map(product => (
-                        <li className={"font-medium leading-tight flex items-center gap-3"}>
-                            <img src={product.product.thumbnail.url} className={"size-20 object-cover rounded-xl border-2 border-slate-200"} alt={product.product.name} />
+                        <li className={"font-medium leading-tight flex items-center gap-3"} key={product.product._id}>
+                            <img src={product.product.thumbnail?.url || "/placeholder.png"} className={"size-20 object-cover rounded-xl border-2 border-slate-200"} alt={product.product.name} />
                             <div>
                                 <p className={"text-lg font-semibold"}>{product.product.name}</p>
-                                <p>Price: ₹{product.price}</p>
+                                <p>Price: ${product.price}</p>
                                 <p>Quantity: {product.quantity}</p>
                             </div>
                         </li>

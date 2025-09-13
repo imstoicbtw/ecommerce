@@ -293,6 +293,7 @@ export function Profile () {
                                 <Button
                                     to={`/account/pay/${order._id}`}
                                     className={"absolute top-3 right-3 !p-2 !rounded-full"}
+                                    target={"_blank"}
                                 >
                                     <ArrowTopRightOnSquareIcon className={"size-4"} />
                                 </Button>

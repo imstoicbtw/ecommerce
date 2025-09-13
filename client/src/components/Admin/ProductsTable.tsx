@@ -68,9 +68,9 @@ export function ProductsTable ({ products: receivedProducts }: Props) {
                 {products.map((product) => (
                     <tr key={product._id} className={`*:text-slate-700 leading-tight hover:bg-blue-50`}>
                         <td className={"max-w-max p-0"}>
-                            <img src={product.thumbnail.url} alt={product.name} className={"w-full aspect-square h-16 object-cover"} />
+                            <img src={product.thumbnail?.url || "/placeholder.png"} alt={product.name} className={"aspect-square h-16 object-cover"} />
                         </td>
-                        <td className={"p-2 "}>{product.name}</td>
+                        <td className={"p-2"}>{product.name}</td>
                         <td className={"p-2 text-right"}>{product.price}</td>
                         <td className={"p-2 text-center"}>{product.category.name}</td>
                         <td className={"p-2 *:m-auto"}>

@@ -74,22 +74,22 @@ export function Checkout () {
                 <h3 className={"text-xl font-semibold"}>Products</h3>
                 <ul className={"pt-3 grid gap-2"}>
                     {items?.map(({ product, quantity }) => <li
-                            className={"relative flex gap-3 items-center bg-blue-50 p-1 sm:p-3 rounded-2xl border-2 border-blue-100"}
-
+                            className={"relative grid grid-cols-4 md:grid-cols-5 items-center gap-2 bg-blue-50 p-1 sm:p-3 rounded-2xl border-2 border-blue-100"}
+                            key={product._id}
                         >
-                            <Link to={`/product/${product._id}`}>
+                            <Link to={`/product/${product._id}`} className={"col-span-1"}>
                                 <img
-                                    src={product.thumbnail.url}
-                                    alt={product.thumbnail.alt}
-                                    className={"size-20 object-cover rounded-xl sm:rounded-lg border-2 border-blue-100"}
+                                    src={product.thumbnail?.url || "/placeholder.png"}
+                                    alt={product.thumbnail?.alt}
+                                    className={"aspect-square object-cover rounded-xl sm:rounded-lg border-2 border-blue-100"}
                                 />
                             </Link>
-                            <div className={"flex flex-col gap-1 h-full justify-center"}>
+                            <div className={"flex flex-col col-span-3 md:col-span-4 gap-1 h-full justify-center py-1"}>
                                 <Link to={`/product/${product._id}`} className={"link"}>
-                                    <h2 className={"font-semibold text-lg flex gap-2 items-center"}>
-                                        {product.name}
-                                        <XMarkIcon className={"size-5"} />
-                                        {quantity}
+                                    <h2 className={"font-semibold sm:text-lg"}>
+                                        <span>{product.name}</span>
+                                        <XMarkIcon className={"size-5 -mt-1 mx-1 inline-block"} />
+                                        <span>{quantity}</span>
                                     </h2>
                                 </Link>
                                 <div>

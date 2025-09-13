@@ -28,8 +28,8 @@ export function EditProduct () {
 
     const thumbnailButtonRef = useRef<HTMLDivElement>(null);
     const galleryButtonRef = useRef<HTMLButtonElement>(null);
-    const [ thumbnail, setThumbnail ] = useState<string[]>([]);
-    const [ gallery, setGallery ] = useState<string[]>([]);
+    const [ thumbnail, setThumbnail ] = useState<(string | null)[]>([]);
+    const [ gallery, setGallery ] = useState<(string | null)[]>([]);
     const [ formState, setFormState ] = useState<updateProductReqBodyType>({});
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -44,24 +44,24 @@ export function EditProduct () {
     };
 
 
-    const { data: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]);
+    const { data: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]!);
     const [ fetchedThumbnail, setFetchedThumbnail ] = useState<IMediaRawDoc & { _id: string }>();
     useEffect(() => {
         if (!thumbnail) return;
         refetchThumbnail();
-        setFormState(prevFormState => ({ ...prevFormState, thumbnail: thumbnail[0] }));
+        setFormState(prevFormState => ({ ...prevFormState, thumbnail: thumbnail[0]! }));
     }, [ refetchThumbnail, thumbnail ]);
     useEffect(() => {
         setFetchedThumbnail(() => fetchedThumbnailData?.data);
     }, [ fetchedThumbnailData ]);
 
 
-    const { data: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery);
+    const { data: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery as [ string ]);
     const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
     useEffect(() => {
         if (!gallery) return;
         refetchGallery();
-        setFormState(prevFormState => ({ ...prevFormState, gallery }));
+        setFormState(prevFormState => ({ ...prevFormState, gallery: gallery as [ string ] }));
     }, [ gallery, refetchGallery ]);
     useEffect(() => {
         setFetchedGallery(() => fetchedGalleryData?.data);
@@ -78,7 +78,7 @@ export function EditProduct () {
                 gallery: data.gallery.map(item => item._id),
             } as unknown as updateProductReqBodyType;
         });
-        setThumbnail(() => fetchedProductData?.data?.thumbnail._id ? [ fetchedProductData.data.thumbnail._id ] : []);
+        setThumbnail(() => fetchedProductData?.data?.thumbnail?._id ? [ fetchedProductData.data.thumbnail?._id ] : []);
         setGallery(() => fetchedProductData?.data?.gallery.map(({ _id }: { _id: string }) => _id) || []);
     }, [ fetchedProductData ]);
 
@@ -208,7 +208,7 @@ export function EditProduct () {
                                 </div>
                             ) : (
                                 <img
-                                    src={fetchedThumbnail?.url}
+                                    src={fetchedThumbnail?.url || "/placeholder.png"}
                                     alt={fetchedThumbnail?.name}
                                     className={"w-full h-full object-cover"}
                                 />
@@ -244,7 +244,7 @@ export function EditProduct () {
                                                         setGallery(gallery.filter(id => id !== image._id));
                                                     }}
                                                 />
-                                                <img key={image._id} src={image.url} alt={image.name} className={"object-cover w-full h-full aspect-square"} />
+                                                <img key={image._id} src={image.url || "/placeholder.png"} alt={image.name} className={"object-cover w-full h-full aspect-square"} />
                                             </div>
                                         ))
                                     }
