@@ -23,8 +23,8 @@ export function NewProduct () {
 
     const thumbnailButtonRef = useRef<HTMLDivElement>(null);
     const galleryButtonRef = useRef<HTMLButtonElement>(null);
-    const [ thumbnail, setThumbnail ] = useState<string[]>([]);
-    const [ gallery, setGallery ] = useState<string[]>([]);
+    const [ thumbnail, setThumbnail ] = useState<(string | null)[]>([]);
+    const [ gallery, setGallery ] = useState<(string | null)[]>([]);
     const [ formState, setFormState ] = useState<createProductReqBodyType>({
         name: "",
         description: "",
@@ -33,8 +33,8 @@ export function NewProduct () {
         onSale: false,
         isActive: true,
         category: "",
-        thumbnail: thumbnail[0],
-        gallery: gallery,
+        thumbnail: thumbnail[0]!,
+        gallery: gallery as [ string ],
     });
 
 
@@ -50,12 +50,12 @@ export function NewProduct () {
     };
 
 
-    const { data: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0], { skip: !thumbnail[0] });
+    const { data: fetchedThumbnailData, refetch: refetchThumbnail } = useGetMediaByIdQuery(thumbnail[0]!, { skip: !thumbnail[0] });
     const [ fetchedThumbnail, setFetchedThumbnail ] = useState<IMediaRawDoc & { _id: string }>();
     useEffect(() => {
         if (!thumbnail.length) return;
         refetchThumbnail();
-        setFormState({ ...formState, thumbnail: thumbnail[0] });
+        setFormState({ ...formState, thumbnail: thumbnail[0]! });
     }, [ thumbnail ]);
     useEffect(() => {
         setFetchedThumbnail(fetchedThumbnailData?.data);
@@ -63,13 +63,13 @@ export function NewProduct () {
 
 
     const [ fetchedGallery, setFetchedGallery ] = useState<(IMediaRawDoc & { _id: string })[]>([]);
-    const { data: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery, {
+    const { data: fetchedGalleryData, refetch: refetchGallery } = useGetGalleryQuery(gallery as [ string ], {
         skip: !gallery.length,
     });
     useEffect(() => {
         if (!gallery.length) return;
         refetchGallery();
-        setFormState({ ...formState, gallery });
+        setFormState({ ...formState, gallery: gallery as [ string ] });
     }, [ gallery ]);
     useEffect(() => {
         setFetchedGallery(fetchedGalleryData?.data);
