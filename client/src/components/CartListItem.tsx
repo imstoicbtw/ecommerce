@@ -36,7 +36,7 @@ export const CartListItem = ({ cartItem }: Props) => {
                 <img
                     src={product.thumbnail.url}
                     alt={product.thumbnail.alt}
-                    className={"size-20 sm:size-50 h-full object-cover rounded-lg border-2 border-blue-100"}
+                    className={"size-20 sm:size-50 w-full h-full object-cover rounded-lg border-2 border-blue-100"}
                 />
             </Link>
             <div className={"flex flex-col sm:gap-1 h-full ml-2 sm:ml-0 sm:p-3 justify-center"}>
@@ -47,7 +47,7 @@ export const CartListItem = ({ cartItem }: Props) => {
                     onClick={handleRemoveFromCart}
                 ><TrashIcon /></Button>
                 <Link to={`/product/${product._id}`} className={"link"}>
-                    <h2 className={"font-semibold text-base sm:text-xl flex gap-1 items-center"}>
+                    <h2 className={"font-semibold text-sm sm:text-xl flex gap-1 items-center leading-tight"}>
                         {product.name}
                         <ArrowTopRightOnSquareIcon className={"size-3"} />
                     </h2>
