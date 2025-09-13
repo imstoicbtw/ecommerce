@@ -178,7 +178,7 @@ export function ProductPage () {
                                 </p>
                                 <p className={"mt-2"}>
                                     <span className={"py-1 px-2 text-sm sm:text-base rounded-full bg-blue-500 text-white font-bold"}>
-                                        {Math.round((salePrice! / price) * 100)}%
+                                        {Math.round((salePrice! / price) * 100 - 100)}%
                                     </span>
                                     <span className={"font-medium text-sm sm:text-base text-blue-500 ml-2"}>You would save ${price - salePrice!} on this product.</span>
                                 </p>
