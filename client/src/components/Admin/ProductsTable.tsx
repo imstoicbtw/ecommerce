@@ -52,12 +52,11 @@ export function ProductsTable ({ products: receivedProducts }: Props) {
 
     return (
         <div className={"overflow-x-auto"}>
-            <table className={"w-full border-separate border-spacing-3 text-left **:whitespace-nowrap"}>
+            <table className={"w-full border-separate border-spacing-y-3 text-left"}>
                 <thead>
                 <tr className={"*:bg-blue-100 *:text-slate-700 *:p-2 rounded-lg"}>
                     <th>Image</th>
                     <th>Name</th>
-                    <th>Description</th>
                     <th className={"text-center"}>Price
                     </th>
                     <th className={"text-center"}>Category</th>
@@ -67,12 +66,11 @@ export function ProductsTable ({ products: receivedProducts }: Props) {
                 </thead>
                 <tbody>
                 {products.map((product) => (
-                    <tr key={product._id} className={`*:text-slate-700 leading-tight hover:shadow-lg hover:bg-blue-50`}>
+                    <tr key={product._id} className={`*:text-slate-700 leading-tight hover:bg-blue-50`}>
                         <td className={"max-w-max p-0"}>
                             <img src={product.thumbnail.url} alt={product.name} className={"w-full aspect-square h-16 object-cover"} />
                         </td>
                         <td className={"p-2 "}>{product.name}</td>
-                        <td className={"p-2 max-w-xs truncate"}>{product.description}</td>
                         <td className={"p-2 text-right"}>{product.price}</td>
                         <td className={"p-2 text-center"}>{product.category.name}</td>
                         <td className={"p-2 *:m-auto"}>
